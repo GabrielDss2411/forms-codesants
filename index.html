@@ -361,6 +361,16 @@ const CONTACT = { email: "contato@codesants.com.br" };
 const THANKYOU_VIDEO  = "";
 const THANKYOU_POSTER = "";
 
+/* Endpoint do CRM que recebe as respostas ao concluir o formulário.
+   Vazio = não envia nada (o formulário segue funcionando normalmente).
+   Preencha com a URL do CRM publicado, por exemplo:
+     const CRM_ENDPOINT = "https://crm-codesants.vercel.app/api/diagnosticos";
+   CRM_TOKEN é opcional e só precisa existir se o CRM definir CRM_INGEST_TOKEN.
+   Como esta página é pública, esse token corta ruído automatizado — não é
+   segredo de verdade. */
+const CRM_ENDPOINT = "";
+const CRM_TOKEN    = "";
+
 /* ---- Estrutura das perguntas (fiel ao forms.md) ---- */
 const QUESTIONS = [
   // Identificação
@@ -803,9 +813,56 @@ function go(n){
   n = Math.max(-1, Math.min(DONE, n));
   // Anuncia a troca de parte ao AVANÇAR para a 1ª pergunta de uma nova parte.
   const entersNewPart = forward && n > 0 && n < TOTAL && QUESTIONS[n].part !== QUESTIONS[n-1].part;
+  const conclui = n === DONE && idx !== DONE;
   idx = n;
   render();
   if(entersNewPart) showChapter(QUESTIONS[n].part);
+  if(conclui) sendToCrm();
+}
+
+/* ---- Envio para o CRM ----------------------------------------------------
+   Monta o payload no formato que POST /api/diagnosticos espera: um mapa
+   questionId → resposta, com o texto de "Outro" já embutido na resposta.
+   Falha em silêncio de propósito: o diagnóstico do usuário não pode depender
+   do CRM estar no ar. O PDF continua sendo o comprovante dele.
+   -------------------------------------------------------------------------- */
+function crmPayload(){
+  const out = {};
+  QUESTIONS.forEach(qd=>{
+    const bruto = answers[qd.id];
+    const other = (answers[qd.id+"__other"]||"").trim();
+
+    if(Array.isArray(bruto)){
+      // "__other" é só um marcador interno; o que vale é o texto digitado.
+      const lista = bruto.filter(x=>x!=="__other");
+      if(other) lista.push(other);
+      if(lista.length) out[qd.id] = lista;
+      return;
+    }
+
+    let texto = (bruto||"").trim();
+    if(other) texto = texto ? texto+" · Outro: "+other : "Outro: "+other;
+    if(texto) out[qd.id] = texto;
+  });
+  return out;
+}
+
+function sendToCrm(){
+  if(!CRM_ENDPOINT) return;   // sem CRM configurado, não faz nada
+  const headers = { "Content-Type": "application/json" };
+  if(CRM_TOKEN) headers["X-Ingest-Token"] = CRM_TOKEN;
+
+  fetch(CRM_ENDPOINT, {
+    method: "POST",
+    headers,
+    // keepalive: a requisição sobrevive se a pessoa fechar a aba na sequência.
+    keepalive: true,
+    body: JSON.stringify({
+      answers: crmPayload(),
+      submittedAt: new Date().toISOString(),
+      origem: location.host,
+    }),
+  }).catch(err => console.warn("[crm] não foi possível enviar o diagnóstico:", err));
 }
 
 /* ---- Interstitial de troca de parte ---- */
