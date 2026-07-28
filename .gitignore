@@ -1,0 +1,17 @@
+# Vercel
+.vercel
+
+# Dependências (o projeto é estático, mas evita ruído se algo for adicionado)
+node_modules/
+
+# Ambiente
+.env
+.env.*
+!.env.example
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
