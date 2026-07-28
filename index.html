@@ -134,6 +134,8 @@ input.inp-line::placeholder{color:var(--faint)}
 
 /* choices */
 .choices{display:flex;flex-direction:column;gap:11px}
+/* Complemento em texto abaixo das opções (perguntas com `detail`). */
+textarea.inp.detail{margin-top:14px;min-height:104px;font-size:15.5px}
 .choice{position:relative;display:flex;align-items:center;gap:14px;
   background:var(--surface-2);border:1px solid var(--line);border-radius:14px;
   padding:16px 18px;text-align:left;color:var(--ink);font-size:16px;
@@ -255,6 +257,11 @@ input.inp-line::placeholder{color:var(--faint)}
   font-size:clamp(36px,6.5vw,68px);color:var(--ink-bright);margin:22px 0 0;max-width:16ch;
   transform:translateY(20px);opacity:0;transition:transform .6s var(--ease-out-expo) .1s,opacity .6s .1s}
 .chapter-ov.is-in h2{transform:none;opacity:1}
+/* Texto de transição: aparece só nas partes que têm algo a explicar. */
+.chapter-ov .lead{color:var(--muted);font-size:clamp(15.5px,2vw,18px);line-height:1.6;
+  max-width:54ch;margin:22px 0 0;
+  transform:translateY(20px);opacity:0;transition:transform .6s var(--ease-out-expo) .16s,opacity .6s .16s}
+.chapter-ov.is-in .lead{transform:none;opacity:1}
 .chapter-ov .segs{display:flex;gap:9px;margin-top:38px;max-width:360px;
   transform:translateY(20px);opacity:0;transition:transform .6s var(--ease-out-expo) .2s,opacity .6s .2s}
 .chapter-ov.is-in .segs{transform:none;opacity:1}
@@ -464,8 +471,31 @@ const QUESTIONS = [
     hint:"Selecione tudo que já está pronto.",
     options:["Logo","Manual da marca","Fotos profissionais","Vídeos","Depoimentos","Cases","Avaliações","Portfólio"], other:true },
 
+  // Parte 4
+  { id:"q21", part:"Parte 4 · Além do site", type:"multi",
+    q:["Existe algum processo da empresa que ","poderia ser mais eficiente?"],
+    hint:"Selecione as áreas e conte um pouco sobre isso no campo abaixo.",
+    options:["Atendimento","Comercial","Marketing","Financeiro","Operação","Gestão","Comunicação"],
+    other:true, detail:"Conte um pouco sobre isso…" },
+  { id:"q22", part:"Parte 4 · Além do site", type:"long",
+    q:["Existe alguma ","atividade repetitiva"," que consome muito tempo da equipe?"],
+    hint:"Pode ser algo feito manualmente todos os dias ou várias vezes por semana.",
+    ph:"O que se repete e quanto tempo leva…" },
+  { id:"q23", part:"Parte 4 · Além do site", type:"long",
+    q:["Se você pudesse resolver ","apenas um problema"," da empresa através da tecnologia, qual seria?"],
+    hint:"Não precisa saber qual seria a solução. Quero entender qual desafio mais impacta o dia a dia do negócio.",
+    ph:"O problema que mais pesa…" },
+  { id:"q24", part:"Parte 4 · Além do site", type:"long",
+    q:["Vocês usam alguma ferramenta ou sistema que ","não atende mais à empresa?"],
+    hint:"Se sim, qual? E o que falta nela?",
+    ph:"A ferramenta e o que está faltando…" },
+  { id:"q25", part:"Parte 4 · Além do site", type:"long",
+    q:["Existe algum ","projeto ou ideia"," que vocês gostariam de colocar em prática no futuro?"],
+    hint:"Mesmo que ainda não seja prioridade.",
+    ph:"A ideia que ainda não saiu do papel…" },
+
   // Final
-  { id:"q21", part:"A última pergunta, e a mais importante", type:"long", featured:true,
+  { id:"q26", part:"A última pergunta, e a mais importante", type:"long", featured:true,
     q:["Daqui a um ano, você diz: ",["“esse projeto superou minhas expectativas”"],". O que precisaria ter acontecido?"],
     hint:"Não pense apenas no site em si, mas nos resultados que ele teria gerado para a sua empresa.",
     ph:"O cenário de sucesso, um ano depois…" },
@@ -605,6 +635,17 @@ function buildQuestion(qd){
       ow.appendChild(inp); box.appendChild(ow);
     }
     field.appendChild(box);
+
+    /* Complemento em texto para perguntas que pedem "conte um pouco sobre isso":
+       marcar a área não responde a pergunta, o relato é que responde. */
+    if(qd.detail){
+      const det = el("textarea","inp detail");
+      det.placeholder = qd.detail;
+      det.value = answers[qd.id+"__detalhe"] || "";
+      det.setAttribute("aria-label", stripTags(qTitle(qd.q))+" — detalhe");
+      det.addEventListener("input", ()=>{ answers[qd.id+"__detalhe"]=det.value; save(); syncNav(qd); });
+      field.appendChild(det);
+    }
   }
   s.appendChild(field);
   return s;
@@ -673,6 +714,8 @@ function answerText(qd){
   let base = Array.isArray(v) ? v.filter(x=>x!=="__other").join(", ") : (v||"").trim();
   const other = (answers[qd.id+"__other"]||"").trim();
   if(other) base = base ? base+" · Outro: "+other : "Outro: "+other;
+  const detalhe = (answers[qd.id+"__detalhe"]||"").trim();
+  if(detalhe) base = base ? base+" — "+detalhe : detalhe;
   return base;
 }
 
@@ -683,11 +726,11 @@ function buildDone(){
   const s = el("section","done");
   s.innerHTML = `
     <div class="done__check">✓</div>
-    <h2>Estamos <span class="hl">quase lá…</span></h2>
+    <h2>Estamos <span class="hl">quase lá!</span></h2>
     <p class="done__lead">Muito obrigado por dedicar esse tempo.</p>
-    <p>Acredito que entender o seu negócio é muito mais importante do que simplesmente criar um site bonito.</p>
-    <p>Agora vou analisar cuidadosamente cada resposta para montar uma proposta alinhada ao momento da sua empresa, aos seus objetivos e às oportunidades de crescimento que identifiquei.</p>
-    <p>Caso eu encontre algum ponto que mereça ser aprofundado, entrarei em contato antes de elaborar a proposta. Prefiro fazer menos promessas e entregar uma solução que realmente faça sentido para o seu negócio.</p>
+    <p>Acredito que entender profundamente o seu negócio é muito mais importante do que simplesmente executar uma demanda.</p>
+    <p>Vou analisar cuidadosamente todas as suas respostas para compreender o momento da empresa, identificar oportunidades e elaborar uma proposta alinhada aos seus objetivos.</p>
+    <p>Se durante essa análise eu perceber que existe uma solução mais adequada do que a inicialmente imaginada, entrarei em contato antes de montar a proposta. Prefiro recomendar o que realmente gera resultado para o seu negócio do que entregar apenas aquilo que foi solicitado.</p>
     <p class="done__sign">Nos falamos em breve!</p>
     <p class="done__next">Se quiser, leve uma cópia das suas respostas.</p>
     <div class="actions">
@@ -823,6 +866,11 @@ function crmPayload(){
     const bruto = answers[qd.id];
     const other = (answers[qd.id+"__other"]||"").trim();
 
+    // O relato vai em chave própria: se entrasse na lista de opções, um
+    // parágrafo viraria "categoria" nos gráficos do CRM.
+    const detalhe = (answers[qd.id+"__detalhe"]||"").trim();
+    if(detalhe) out[qd.id+"__detalhe"] = detalhe;
+
     if(Array.isArray(bruto)){
       // "__other" é só um marcador interno; o que vale é o texto digitado.
       const lista = bruto.filter(x=>x!=="__other");
@@ -856,7 +904,14 @@ function sendToCrm(){
   }).catch(err => console.warn("[crm] não foi possível enviar o diagnóstico:", err));
 }
 
-/* ---- Interstitial de troca de parte ---- */
+/* ---- Interstitial de troca de parte ----
+   Partes com texto de transição (PART_INTROS) não somem sozinhas: existem
+   para serem lidas, então esperam a pessoa avançar. */
+const PART_INTROS = {
+  "Parte 4 · Além do site":
+    "Até aqui entendemos o projeto do site. Agora são algumas perguntas rápidas sobre a empresa como um todo. Elas são opcionais, mas costumam revelar oportunidades que passam despercebidas.",
+};
+
 let chapterActive = false, chapterTimer;
 function showChapter(part){
   const bits = part.split(" · ");
@@ -864,12 +919,14 @@ function showChapter(part){
   const eyebrow = hasSplit ? bits[0] : "Para terminar";
   const title = hasSplit ? bits.slice(1).join(" · ") : part;
   const pi = PARTS.indexOf(part);
+  const intro = PART_INTROS[part];
 
   const ov = el("div","chapter-ov");
   ov.setAttribute("role","status");
   ov.innerHTML = `<div class="inner">
     <div class="num"><span class="line"></span>${escapeHtml(eyebrow)}</div>
     <h2>${escapeHtml(title)}</h2>
+    ${intro ? `<p class="lead">${escapeHtml(intro)}</p>` : ""}
     <div class="segs">${PARTS.map((_,i)=>`<span class="seg${i<=pi?" on":""}"></span>`).join("")}</div>
     <div class="tap">toque ou pressione Enter para continuar</div>
   </div>`;
@@ -891,8 +948,11 @@ function showChapter(part){
   ov.addEventListener("click", dismiss);
   document.addEventListener("keydown", onKey, true);
 
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  chapterTimer = setTimeout(dismiss, reduce ? 1100 : 2000);
+  // Com texto de transição não há relógio: quem fecha é quem lê.
+  if(!intro){
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    chapterTimer = setTimeout(dismiss, reduce ? 1100 : 2000);
+  }
 }
 function focusStep(){
   const active = wrap.querySelector(".step.is-active");

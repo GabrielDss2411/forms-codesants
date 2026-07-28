@@ -171,11 +171,79 @@ Cases
 Avaliações
 Portfólio
 Outro
+
+
+Parte 4 — Além do site
+
+Um bom site é apenas uma das ferramentas que podem ajudar uma empresa a crescer.
+
+Dependendo do momento do seu negócio, talvez existam oportunidades em outras áreas, como automação de processos, desenvolvimento de sistemas, inteligência artificial ou otimização da operação.
+
+As próximas perguntas me ajudam a entender se existe alguma oportunidade além do projeto inicial.
+
+21. Hoje, existe algum processo da empresa que você sente que poderia ser mais eficiente?
+
+Pode ser algo relacionado a:
+
+Atendimento
+Comercial
+Marketing
+Financeiro
+Operação
+Gestão
+Comunicação
+Outro
+
+Conte um pouco sobre isso.
+
+22. Existe alguma atividade repetitiva que consome muito tempo da equipe?
+
+Pode ser algo feito manualmente todos os dias ou várias vezes por semana.
+
+23. Se você pudesse resolver apenas um problema da empresa através da tecnologia, qual seria?
+
+Não precisa saber qual seria a solução.
+
+Quero entender qual desafio mais impacta o dia a dia do negócio.
+
+24. Hoje vocês utilizam alguma ferramenta ou sistema que não atende mais às necessidades da empresa?
+
+Se sim, qual?
+
+O que falta nela?
+
+25. Existe algum projeto ou ideia que vocês gostariam de colocar em prática no futuro?
+
+Mesmo que ainda não seja prioridade.
+
 A última pergunta
 
 Essa é, de fato, a mais importante.
 
 Imagine que estamos conversando daqui a um ano. Você olha para trás e me diz: "Esse projeto superou minhas expectativas". O que precisaria ter acontecido para você dizer isso? Não pense apenas no site em si, mas nos resultados que ele teria gerado para a sua empresa.
+
+Encerramento
+
+Estamos quase lá!
+
+Muito obrigado por dedicar esse tempo.
+
+Acredito que entender profundamente o seu negócio é muito mais importante do que simplesmente executar uma demanda.
+
+Vou analisar cuidadosamente todas as suas respostas para compreender o momento da empresa, identificar oportunidades e elaborar uma proposta alinhada aos seus objetivos.
+
+Se durante essa análise eu perceber que existe uma solução mais adequada do que a inicialmente imaginada, entrarei em contato antes de montar a proposta. Prefiro recomendar o que realmente gera resultado para o seu negócio do que entregar apenas aquilo que foi solicitado.
+
+Nos falamos em breve!
+
+Um detalhe que eu acrescentaria
+
+Antes da Parte 4, colocaria uma transição como esta:
+
+Até aqui entendemos o projeto do site. Agora gostaria de fazer algumas perguntas rápidas sobre a empresa como um todo. Elas são opcionais, mas costumam revelar oportunidades que muitas vezes passam despercebidas.
+
+
+
 
 Um detalhe que considero um diferencial
 
