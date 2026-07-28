@@ -1,191 +1,220 @@
-Diagnóstico Estratégico
-Antes de começarmos...
+## Diagnóstico Inicial da Empresa
+
+### Antes de começarmos
 
 Olá!
 
-Antes de desenvolver qualquer proposta, gosto de entender profundamente o negócio dos meus clientes.
+Obrigado pelo interesse em desenvolver seu projeto conosco.
 
-Acredito que um site só gera resultado quando ele nasce alinhado aos objetivos da empresa. Por isso, este formulário não é apenas um briefing técnico. Ele é um diagnóstico estratégico.
+Embora o ponto de partida seja a criação de um site, acreditamos que um bom projeto começa entendendo **como a empresa funciona, como ela se posiciona no mercado e quais resultados deseja alcançar**.
 
-Não existem respostas certas ou erradas. Quanto mais detalhes você conseguir compartilhar, mais personalizada será a solução que vou construir para você.
+Este formulário é a primeira etapa do nosso processo de descoberta.
 
-O preenchimento leva cerca de 10 minutos.
+Com as respostas, conseguiremos compreender melhor o momento da empresa e identificar oportunidades de comunicação, vendas, automação e tecnologia que possam gerar impacto real no negócio.
 
-Parte 1 · Quero conhecer sua empresa
-1.
+**Tempo médio de preenchimento: 10 a 15 minutos.**
 
-Se sua empresa estivesse sentada na minha frente, como ela se apresentaria?
+---
 
-Conte sua história da forma que achar mais natural.
+# 1. Conhecendo a empresa
 
-Como surgiu?
+### 1. Conte um pouco sobre a história da empresa.
 
-O que motivou sua criação?
+Como surgiu, o que motivou sua criação e o que vocês fazem hoje?
 
-O que vocês fazem hoje?
+---
 
-2.
+### 2. Se tivesse que resumir sua empresa em uma frase, qual seria?
 
-O que faz vocês levantarem da cama todos os dias?
+Ex.: “Ajudamos empresas a…”, “Somos especialistas em…”, “Transformamos…”.
 
-Além de vender um serviço, qual transformação vocês acreditam entregar para seus clientes?
+---
 
-3.
+### 3. Quais são os principais produtos ou serviços da empresa?
 
-Hoje, qual é o serviço (ou produto) mais importante para o negócio?
+Coloque em ordem de prioridade, se possível.
 
-Se houver mais de um, coloque em ordem de prioridade.
+---
 
-4.
+# 2. Momento atual do negócio
 
-Se eu fosse indicar sua empresa para um amigo, como você gostaria que eu a descrevesse?
+### 4. Como você descreveria o momento atual da empresa?
 
-Essa resposta normalmente revela muito sobre o posicionamento da marca.
+* Início das operações
+* Crescimento
+* Consolidação
+* Expansão
+* Reestruturação
+* Outro: ________
 
-Parte 2 · Entendendo o momento da empresa
-5.
+---
 
-Como está a empresa hoje?
+### 5. Quais são os três maiores desafios da empresa hoje?
 
-Quais são os maiores desafios que vocês enfrentam atualmente?
+Pode incluir desafios comerciais, operacionais, financeiros ou de gestão.
 
-6.
+---
 
-Hoje, de onde vêm a maioria dos seus clientes?
+### 6. Em qual faixa de faturamento mensal a empresa se encontra?
 
-Conte um pouco sobre como acontece esse processo.
+**Essa informação é utilizada apenas para adequar a estratégia e a proposta ao porte da empresa.**
 
-7.
+* Até R$ 20 mil
+* R$ 20 mil a R$ 50 mil
+* R$ 50 mil a R$ 100 mil
+* R$ 100 mil a R$ 300 mil
+* R$ 300 mil a R$ 1 milhão
+* Acima de R$ 1 milhão
+* Prefiro não informar
 
-Quando um cliente decide contratar vocês, normalmente o que convence essa decisão?
+---
 
-Preço?
+### 7. Qual é a principal meta da empresa para os próximos 12 meses?
 
-Confiança?
+Ex.: aumentar faturamento, captar mais clientes, expandir para novas regiões, contratar equipe, estruturar processos, lançar novos serviços etc.
 
-Rapidez?
+---
 
-Especialização?
+# 3. Marca e posicionamento
 
-Atendimento?
+### 8. Como você gostaria que um cliente descrevesse sua empresa?
 
-Outro?
+Ex.: confiável, premium, moderna, rápida, técnica, próxima, inovadora, referência no mercado etc.
 
-8.
+---
 
-Existe alguma dificuldade recorrente para fechar vendas?
+### 9. Na sua opinião, por que um cliente escolhe vocês e não um concorrente?
 
-Quais perguntas ou objeções você mais escuta?
+Se possível, cite uma situação real.
 
-9.
+---
 
-Para que eu possa propor uma solução compatível com o momento da empresa, em qual faixa de faturamento mensal ela se encontra?
+### 10. Existe alguma percepção que vocês definitivamente NÃO querem transmitir?
 
-Essa informação é utilizada apenas como referência estratégica e permanece totalmente confidencial.
+Ex.: empresa pequena, amadora, cara, popular, distante, fria, desorganizada etc.
 
-Até R$ 20 mil
-R$ 20 mil a R$ 50 mil
-R$ 50 mil a R$ 100 mil
-R$ 100 mil a R$ 300 mil
-Acima de R$ 300 mil
-Prefiro não informar
-10.
+---
 
-Existe alguma meta importante para os próximos 12 meses?
+### 11. Existem empresas cuja comunicação ou posicionamento vocês admiram?
 
-Pode ser crescimento, expansão, contratação, aumento de faturamento...
+Pode ser do mesmo segmento ou não. Se tiver, envie links.
 
-Parte 3 · Construindo um site que realmente gere resultado
-11.
+---
 
-Quando alguém acessa o site da sua empresa pela primeira vez, o que você gostaria que essa pessoa pensasse nos primeiros 10 segundos?
+# 4. Clientes e vendas
 
-Essa resposta vai definir toda a comunicação da página inicial.
+### 12. Quem é o cliente ideal da empresa?
 
-12.
+Descreva o tipo de cliente que vocês mais gostam de atender.
 
-Depois desses 10 segundos, qual deveria ser a próxima atitude desse visitante?
+---
 
-Pedir orçamento?
+### 13. Como um cliente normalmente conhece vocês?
 
-Enviar mensagem?
+* Instagram
+* Google
+* Indicação
+* WhatsApp
+* LinkedIn
+* Tráfego pago
+* Outro: ________
 
-Agendar uma reunião?
+---
 
-Ligar?
+### 14. O que normalmente faz um cliente fechar negócio com vocês?
 
-Conhecer um serviço?
+* Preço
+* Confiança
+* Especialização
+* Rapidez
+* Atendimento
+* Indicação
+* Outro: ________
 
-13.
+---
 
-Quem é o cliente ideal da sua empresa?
+### 15. Existe alguma dificuldade recorrente para fechar vendas?
 
-Não pense em "todo mundo".
+Quais objeções ou dúvidas vocês mais escutam?
 
-Pense na pessoa ou empresa que você gostaria de atender todos os dias.
+---
 
-14.
+# 5. Operação e processos
 
-Na sua opinião, por que um cliente escolhe vocês e não um concorrente?
+### 16. Depois que um cliente fecha negócio, como funciona o processo até a entrega do serviço?
 
-Se puder, conte situações reais.
+Descreva resumidamente o fluxo de atendimento.
 
-15.
+---
 
-Existe algum serviço que vocês gostariam de vender mais?
+### 17. Hoje, quais atividades mais consomem tempo da equipe ou geram retrabalho?
 
-Mesmo que hoje ele não seja o mais procurado.
+Ex.: atendimento no WhatsApp, envio de propostas, organização de informações, planilhas, agendamentos, cobranças, emissão de documentos etc.
 
-16.
+---
 
-Quais dúvidas os clientes normalmente têm antes de contratar vocês?
+### 18. Quais ferramentas ou sistemas vocês utilizam atualmente?
 
-Essas dúvidas provavelmente serão respondidas dentro do próprio site.
+* WhatsApp
+* Planilhas (Excel/Google Sheets)
+* ERP
+* CRM
+* Agenda online
+* Sistema próprio
+* Outro: ________
 
-17.
+---
 
-Se um concorrente visitasse seu site, o que você gostaria que ele percebesse sobre sua empresa?
+# 6. Tecnologia e oportunidades
 
-Essa pergunta costuma revelar o verdadeiro diferencial competitivo.
+### 19. Se a tecnologia pudesse resolver apenas um problema da empresa hoje, qual seria?
 
-18.
+Essa resposta nos ajuda a identificar oportunidades de melhoria com automações, integrações, inteligência artificial ou sistemas personalizados.
 
-Existe algo que você definitivamente NÃO quer transmitir?
+---
 
-Exemplos:
+### 20. Além do site, existe algum processo, ideia ou necessidade que vocês acreditam que poderia ser melhorado com tecnologia?
 
-Empresa pequena
-Empresa amadora
-Empresa cara
-Empresa popular
-Empresa fria
-Empresa distante
+Mesmo que ainda não exista um projeto definido.
 
-Ou qualquer outra percepção que queira evitar.
+---
 
-19.
+# Materiais disponíveis
 
-Quais empresas (do seu segmento ou não) transmitem a imagem que você admira?
+### 21. Quais materiais vocês já possuem?
 
-Pode enviar links.
+* Logo
+* Manual da marca
+* Identidade visual
+* Fotos profissionais
+* Vídeos
+* Portfólio
+* Cases
+* Depoimentos
+* Avaliações de clientes
+* Outro: ________
 
-O objetivo não é copiar, mas entender referências.
+---
 
-20.
+# A pergunta mais importante
 
-Quais materiais vocês já possuem?
+### 22. Imagine que estamos conversando daqui a um ano e você me diz:
 
-Logo
-Manual da marca
-Fotos profissionais
-Vídeos
-Depoimentos
-Cases
-Avaliações
-Portfólio
-Outro
-A última pergunta
+> “Esse projeto superou completamente minhas expectativas.”
 
-Essa é, de fato, a mais importante.
+O que precisaria ter acontecido para que essa frase fosse verdadeira?
 
-Imagine que estamos conversando daqui a um ano. Você olha para trás e me diz: "Esse projeto superou minhas expectativas". O que precisaria ter acontecido para você dizer isso? Não pense apenas no site em si, mas nos resultados que ele teria gerado para a sua empresa.
+Pode pensar em resultados como aumento de vendas, fortalecimento da marca, ganho de produtividade, redução de retrabalho, automação de processos, melhoria da experiência do cliente ou qualquer outro impacto importante para a empresa.
+
+---
+
+# (Opcional) Diagnóstico em vídeo
+
+Se preferir, grave um vídeo de até **5 minutos** apresentando sua empresa e contando livremente sobre:
+
+* o momento atual do negócio;
+* os principais desafios;
+* o que espera deste projeto;
+* e qualquer informação que considere importante.
+
+Muitas vezes, uma conversa traz detalhes que um formulário não consegue captar.

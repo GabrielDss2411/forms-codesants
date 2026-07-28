@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Diagnóstico Estratégico · CodeSants</title>
-<meta name="description" content="Diagnóstico estratégico CodeSants: antes de qualquer proposta, entendemos profundamente o seu negócio." />
+<title>Diagnóstico Inicial da Empresa · CodeSants</title>
+<meta name="description" content="Diagnóstico inicial CodeSants: a primeira etapa do nosso processo de descoberta, antes de qualquer proposta." />
 <meta name="color-scheme" content="dark" />
 <link rel="icon" href="./logo.svg" type="image/svg+xml" />
 
@@ -186,6 +186,9 @@ input.inp-line::placeholder{color:var(--faint)}
   text-transform:uppercase;color:var(--brand);margin-bottom:20px;display:block}
 .intro h1{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
   line-height:1.02;font-size:clamp(38px,7vw,72px);margin:0;color:var(--ink-bright)}
+/* Mesmo destaque em gradiente usado nas perguntas (.q .hl). */
+.intro h1 .hl{background:linear-gradient(110deg,var(--brand),var(--brand-2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .intro p{color:var(--muted);font-size:clamp(16px,2.2vw,18.5px);line-height:1.66;
   max-width:60ch;margin:22px 0 0}
 .intro p + p{margin-top:14px}
@@ -346,7 +349,7 @@ input.inp-line::placeholder{color:var(--faint)}
 <script>
 "use strict";
 /* ============================================================
-   Diagnóstico Estratégico · CodeSants
+   Diagnóstico Inicial da Empresa · CodeSants
    Formulário multi-step (typeform-style), 100% autônomo.
    ============================================================ */
 
@@ -377,104 +380,119 @@ const QUESTIONS = [
   { id:"nome", part:"Identificação", type:"text",
     q:["Para começar, ","com quem eu falo?"],
     hint:"Seu nome completo.", ph:"Seu nome completo" },
+  { id:"telefone", part:"Identificação", type:"tel",
+    q:["Um ","telefone ou WhatsApp"," para contato?"],
+    hint:"Com DDD. É por aqui que retornamos com o diagnóstico.", ph:"(11) 9 9999-0000" },
   { id:"empresa", part:"Identificação", type:"text",
     q:["Qual é o nome da ","sua empresa?"],
     hint:"Como sua empresa é conhecida.", ph:"Nome da empresa" },
-  { id:"telefone", part:"Identificação", type:"tel",
-    q:["E um ","telefone ou WhatsApp"," para contato?"],
-    hint:"Com DDD. É por aqui que retornamos com o diagnóstico.", ph:"(11) 9 9999-0000" },
+  { id:"email", part:"Identificação", type:"email",
+    q:["E o seu ","e-mail?"],
+    hint:"Para onde enviamos o diagnóstico e a proposta.", ph:"voce@empresa.com.br" },
 
-  // Parte 1
-  { id:"q1", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
-    q:["Se sua empresa estivesse sentada na minha frente, ","como ela se apresentaria?"],
-    hint:"Conte a história do jeito que achar mais natural.",
+  // Parte 1 · Conhecendo a empresa
+  { id:"q1", part:"Parte 1 · Conhecendo a empresa", type:"long",
+    q:["Conte um pouco sobre a ","história da empresa."],
+    hint:"Do jeito que achar mais natural.",
     tags:["Como surgiu?","O que motivou a criação?","O que vocês fazem hoje?"],
     ph:"Escreva livremente…" },
-  { id:"q2", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
-    q:["O que faz vocês ","levantarem da cama todos os dias?"],
-    hint:"Além de vender um serviço, qual transformação vocês acreditam entregar aos clientes?",
-    ph:"A transformação que vocês entregam…" },
-  { id:"q3", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
-    q:["Qual é o serviço mais ","importante para o negócio hoje?"],
-    hint:"Se houver mais de um, coloque em ordem de prioridade.",
+  { id:"q2", part:"Parte 1 · Conhecendo a empresa", type:"text",
+    q:["Se tivesse que resumir sua empresa ","em uma frase, qual seria?"],
+    hint:"Ex.: “Ajudamos empresas a…”, “Somos especialistas em…”, “Transformamos…”.",
+    ph:"Somos a empresa que…" },
+  { id:"q3", part:"Parte 1 · Conhecendo a empresa", type:"long",
+    q:["Quais são os principais ","produtos ou serviços da empresa?"],
+    hint:"Coloque em ordem de prioridade, se possível.",
     ph:"1º… 2º… 3º…" },
-  { id:"q4", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
-    q:["Se eu indicasse sua empresa a um amigo, ","como você gostaria que eu a descrevesse?"],
-    hint:"Essa resposta normalmente revela muito sobre o posicionamento da marca.",
-    ph:"“É uma empresa que…”" },
 
-  // Parte 2
-  { id:"q5", part:"Parte 2 · O momento da empresa", type:"long",
-    q:["Como está a empresa hoje?"],
-    hint:"Quais são os maiores desafios que vocês enfrentam atualmente?",
-    ph:"O momento atual e os principais desafios…" },
-  { id:"q6", part:"Parte 2 · O momento da empresa", type:"long",
-    q:["De onde vêm a ","maioria dos seus clientes hoje?"],
-    hint:"Conte um pouco sobre como esse processo acontece.",
-    ph:"Indicação, redes sociais, tráfego pago, prospecção…" },
-  { id:"q7", part:"Parte 2 · O momento da empresa", type:"multi",
-    q:["Quando um cliente decide contratar, ","o que costuma convencer a decisão?"],
-    hint:"Selecione tudo que se aplica.",
-    options:["Preço","Confiança","Rapidez","Especialização","Atendimento"], other:true },
-  { id:"q8", part:"Parte 2 · O momento da empresa", type:"long",
-    q:["Existe alguma ","dificuldade recorrente para fechar vendas?"],
-    hint:"Quais perguntas ou objeções você mais escuta?",
-    ph:"As objeções que mais aparecem…" },
-  { id:"q9", part:"Parte 2 · O momento da empresa", type:"single",
+  // Parte 2 · Momento atual do negócio
+  { id:"q4", part:"Parte 2 · Momento atual do negócio", type:"single",
+    q:["Como você descreveria o ","momento atual da empresa?"],
+    hint:"Escolha o que melhor representa hoje.",
+    options:["Início das operações","Crescimento","Consolidação","Expansão","Reestruturação"], other:true },
+  { id:"q5", part:"Parte 2 · Momento atual do negócio", type:"long",
+    q:["Quais são os ","três maiores desafios"," da empresa hoje?"],
+    hint:"Pode incluir desafios comerciais, operacionais, financeiros ou de gestão.",
+    ph:"1º… 2º… 3º…" },
+  { id:"q6", part:"Parte 2 · Momento atual do negócio", type:"single",
     q:["Em qual ","faixa de faturamento mensal"," a empresa se encontra?"],
-    hint:"Usado apenas como referência estratégica e mantido totalmente confidencial.",
-    options:["Até R$ 20 mil","R$ 20 mil a R$ 50 mil","R$ 50 mil a R$ 100 mil","R$ 100 mil a R$ 300 mil","Acima de R$ 300 mil","Prefiro não informar"] },
-  { id:"q10", part:"Parte 2 · O momento da empresa", type:"long",
-    q:["Existe alguma ","meta importante para os próximos 12 meses?"],
-    hint:"Crescimento, expansão, contratação, aumento de faturamento…",
+    hint:"Usado apenas para adequar a estratégia e a proposta ao porte da empresa. Totalmente confidencial.",
+    options:["Até R$ 20 mil","R$ 20 mil a R$ 50 mil","R$ 50 mil a R$ 100 mil","R$ 100 mil a R$ 300 mil","R$ 300 mil a R$ 1 milhão","Acima de R$ 1 milhão","Prefiro não informar"] },
+  { id:"q7", part:"Parte 2 · Momento atual do negócio", type:"long",
+    q:["Qual é a ","principal meta"," da empresa para os próximos 12 meses?"],
+    hint:"Aumentar faturamento, captar mais clientes, expandir para novas regiões, contratar equipe, estruturar processos, lançar novos serviços…",
     ph:"Onde vocês querem chegar em 12 meses…" },
 
-  // Parte 3
-  { id:"q11", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Nos primeiros 10 segundos no site, ","o que o visitante deveria pensar?"],
-    hint:"Essa resposta vai definir toda a comunicação da página inicial.",
-    ph:"“Nossa, essa empresa…”" },
-  { id:"q12", part:"Parte 3 · Um site que gere resultado", type:"single",
-    q:["Depois desses 10 segundos, ","qual deveria ser a próxima atitude?"],
-    hint:"A ação principal que o site deve provocar.",
-    options:["Pedir orçamento","Enviar mensagem","Agendar uma reunião","Ligar","Conhecer um serviço"], other:true },
-  { id:"q13", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Quem é o ","cliente ideal da sua empresa?"],
-    hint:"Não pense em “todo mundo”. Pense em quem você gostaria de atender todos os dias.",
-    ph:"A pessoa ou empresa dos sonhos para atender…" },
-  { id:"q14", part:"Parte 3 · Um site que gere resultado", type:"long",
+  // Parte 3 · Marca e posicionamento
+  { id:"q8", part:"Parte 3 · Marca e posicionamento", type:"long",
+    q:["Como você gostaria que um cliente ","descrevesse sua empresa?"],
+    hint:"Ex.: confiável, premium, moderna, rápida, técnica, próxima, inovadora, referência no mercado.",
+    ph:"“É uma empresa que…”" },
+  { id:"q9", part:"Parte 3 · Marca e posicionamento", type:"long",
     q:["Por que um cliente ","escolhe vocês e não um concorrente?"],
-    hint:"Se puder, conte situações reais.",
+    hint:"Se possível, cite uma situação real.",
     ph:"O que faz a diferença na hora da escolha…" },
-  { id:"q15", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Existe algum serviço que vocês ","gostariam de vender mais?"],
-    hint:"Mesmo que hoje ele não seja o mais procurado.",
-    ph:"O serviço que merece mais holofote…" },
-  { id:"q16", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Quais dúvidas os clientes têm ","antes de contratar vocês?"],
-    hint:"Provavelmente serão respondidas dentro do próprio site.",
-    ph:"As perguntas que aparecem antes do sim…" },
-  { id:"q17", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Se um concorrente visitasse seu site, ","o que gostaria que ele percebesse?"],
-    hint:"Costuma revelar o verdadeiro diferencial competitivo.",
-    ph:"O que você quer que a concorrência veja…" },
-  { id:"q18", part:"Parte 3 · Um site que gere resultado", type:"multi",
-    q:["Existe algo que você ","definitivamente NÃO quer transmitir?"],
-    hint:"Selecione o que quer evitar e complemente se precisar.",
-    options:["Empresa pequena","Empresa amadora","Empresa cara","Empresa popular","Empresa fria","Empresa distante"], other:true },
-  { id:"q19", part:"Parte 3 · Um site que gere resultado", type:"long",
-    q:["Quais empresas transmitem uma ","imagem que você admira?"],
-    hint:"Pode enviar links. O objetivo não é copiar, mas entender referências.",
+  { id:"q10", part:"Parte 3 · Marca e posicionamento", type:"long",
+    q:["Existe alguma percepção que vocês ","definitivamente NÃO querem transmitir?"],
+    hint:"Ex.: empresa pequena, amadora, cara, popular, distante, fria, desorganizada.",
+    ph:"O que precisa ficar longe da marca…" },
+  { id:"q11", part:"Parte 3 · Marca e posicionamento", type:"long",
+    q:["Existem empresas cuja comunicação ou ","posicionamento vocês admiram?"],
+    hint:"Pode ser do mesmo segmento ou não. Se tiver, envie links.",
     ph:"Marcas de referência (com links, se tiver)…" },
-  { id:"q20", part:"Parte 3 · Um site que gere resultado", type:"multi",
+
+  // Parte 4 · Clientes e vendas
+  { id:"q12", part:"Parte 4 · Clientes e vendas", type:"long",
+    q:["Quem é o ","cliente ideal da empresa?"],
+    hint:"Descreva o tipo de cliente que vocês mais gostam de atender.",
+    ph:"A pessoa ou empresa dos sonhos para atender…" },
+  { id:"q13", part:"Parte 4 · Clientes e vendas", type:"multi",
+    q:["Como um cliente ","normalmente conhece vocês?"],
+    hint:"Selecione tudo que se aplica.",
+    options:["Instagram","Google","Indicação","WhatsApp","LinkedIn","Tráfego pago"], other:true },
+  { id:"q14", part:"Parte 4 · Clientes e vendas", type:"multi",
+    q:["O que normalmente faz um cliente ","fechar negócio com vocês?"],
+    hint:"Selecione tudo que se aplica.",
+    options:["Preço","Confiança","Especialização","Rapidez","Atendimento","Indicação"], other:true },
+  { id:"q15", part:"Parte 4 · Clientes e vendas", type:"long",
+    q:["Existe alguma ","dificuldade recorrente para fechar vendas?"],
+    hint:"Quais objeções ou dúvidas vocês mais escutam?",
+    ph:"As objeções que mais aparecem…" },
+
+  // Parte 5 · Operação e processos
+  { id:"q16", part:"Parte 5 · Operação e processos", type:"long",
+    q:["Depois que um cliente fecha negócio, ","como funciona o processo até a entrega?"],
+    hint:"Descreva resumidamente o fluxo de atendimento.",
+    ph:"Do aceite até a entrega…" },
+  { id:"q17", part:"Parte 5 · Operação e processos", type:"long",
+    q:["Quais atividades mais ","consomem tempo da equipe ou geram retrabalho?"],
+    hint:"Ex.: atendimento no WhatsApp, envio de propostas, organização de informações, planilhas, agendamentos, cobranças, emissão de documentos.",
+    ph:"O que trava o dia a dia…" },
+  { id:"q18", part:"Parte 5 · Operação e processos", type:"multi",
+    q:["Quais ","ferramentas ou sistemas"," vocês utilizam atualmente?"],
+    hint:"Selecione tudo que se aplica.",
+    options:["WhatsApp","Planilhas (Excel/Google Sheets)","ERP","CRM","Agenda online","Sistema próprio"], other:true },
+
+  // Parte 6 · Tecnologia e oportunidades
+  { id:"q19", part:"Parte 6 · Tecnologia e oportunidades", type:"long",
+    q:["Se a tecnologia pudesse resolver ","apenas um problema da empresa hoje, qual seria?"],
+    hint:"Ajuda a identificar oportunidades com automações, integrações, inteligência artificial ou sistemas personalizados.",
+    ph:"O problema que mais dói…" },
+  { id:"q20", part:"Parte 6 · Tecnologia e oportunidades", type:"long",
+    q:["Além do site, existe algo que poderia ","ser melhorado com tecnologia?"],
+    hint:"Algum processo, ideia ou necessidade — mesmo que ainda não exista um projeto definido.",
+    ph:"O que você imagina, mesmo sem forma ainda…" },
+
+  // Materiais disponíveis
+  { id:"q21", part:"Materiais disponíveis", type:"multi",
     q:["Quais ","materiais vocês já possuem?"],
     hint:"Selecione tudo que já está pronto.",
-    options:["Logo","Manual da marca","Fotos profissionais","Vídeos","Depoimentos","Cases","Avaliações","Portfólio"], other:true },
+    options:["Logo","Manual da marca","Identidade visual","Fotos profissionais","Vídeos","Portfólio","Cases","Depoimentos","Avaliações de clientes"], other:true },
 
   // Final
-  { id:"q21", part:"A última pergunta, e a mais importante", type:"long", featured:true,
-    q:["Daqui a um ano, você diz: ",["“esse projeto superou minhas expectativas”"],". O que precisaria ter acontecido?"],
-    hint:"Não pense apenas no site em si, mas nos resultados que ele teria gerado para a sua empresa.",
+  { id:"q22", part:"A pergunta mais importante", type:"long", featured:true,
+    q:["Daqui a um ano, você diz: ",["“esse projeto superou completamente minhas expectativas”"],". O que precisaria ter acontecido?"],
+    hint:"Aumento de vendas, fortalecimento da marca, ganho de produtividade, redução de retrabalho, automação de processos, melhoria da experiência do cliente — ou qualquer outro impacto importante.",
     ph:"O cenário de sucesso, um ano depois…" },
 ];
 
@@ -506,7 +524,7 @@ const btnNext = document.getElementById("btnNext");
 /* ---- Render principal ---- */
 function render(){
   // progress + topbar
-  if(idx < 0){ rail.style.width = "0%"; topMeta.innerHTML = "Diagnóstico Estratégico"; navBar.hidden = true; }
+  if(idx < 0){ rail.style.width = "0%"; topMeta.innerHTML = "Diagnóstico Inicial"; navBar.hidden = true; }
   else if(idx >= REVIEW){ rail.style.width = "100%"; topMeta.innerHTML = idx===DONE ? "Concluído" : "Revisão final"; }
   else{ rail.style.width = ((idx+1)/TOTAL*100)+"%"; topMeta.innerHTML = `Pergunta <b>${idx+1}</b> / ${TOTAL}`; }
 
@@ -539,11 +557,11 @@ function buildIntro(){
   const s = el("section","intro");
   s.innerHTML = `
     <span class="intro__kicker">CodeSants · Olhar Humano</span>
-    <h1>Diagnóstico<br><span class="hl">Estratégico</span></h1>
-    <p>Olá! Antes de desenvolver qualquer proposta, eu gosto de entender profundamente o negócio de cada cliente. Um site só gera resultado quando nasce alinhado aos objetivos da empresa.</p>
-    <p>Por isso este formulário não é apenas um briefing técnico, é um diagnóstico. Não existem respostas certas ou erradas: quanto mais detalhes você compartilhar, mais personalizada será a solução.</p>
+    <h1>Diagnóstico<br><span class="hl">Inicial da Empresa</span></h1>
+    <p>Olá! Obrigado pelo interesse em desenvolver seu projeto conosco. Embora o ponto de partida seja a criação de um site, um bom projeto começa entendendo como a empresa funciona, como ela se posiciona no mercado e quais resultados deseja alcançar.</p>
+    <p>Este formulário é a primeira etapa do nosso processo de descoberta. Com as respostas, conseguimos identificar oportunidades de comunicação, vendas, automação e tecnologia que gerem impacto real no negócio.</p>
     <div class="meta-chips">
-      <span class="chip">${icon('clock')} Cerca de 10 minutos</span>
+      <span class="chip">${icon('clock')} De 10 a 15 minutos</span>
       <span class="chip">${icon('nav')} Navegue livremente entre as etapas</span>
       <span class="chip">${icon('lock')} Confidencial</span>
     </div>
@@ -580,6 +598,7 @@ function buildQuestion(qd){
     if(qd.type === "tel"){ inp.inputMode = "tel"; inp.autocomplete = "tel"; }
     if(qd.id === "nome"){ inp.autocomplete = "name"; }
     if(qd.id === "empresa"){ inp.autocomplete = "organization"; }
+    if(qd.type === "email"){ inp.inputMode = "email"; inp.autocomplete = "email"; }
     inp.placeholder = qd.ph || "";
     inp.value = answers[qd.id] || "";
     inp.setAttribute("aria-label", stripTags(qTitle(qd.q)));
@@ -671,6 +690,7 @@ function respondent(){
     nome: (answers.nome || "").trim(),
     empresa: (answers.empresa || "").trim(),
     tel: (answers.telefone || "").trim(),
+    email: (answers.email || "").trim(),
   };
 }
 function answerText(qd){
@@ -726,19 +746,20 @@ function buildPdfDoc(){
     r.empresa && `<div><span>Empresa</span><b>${escapeHtml(r.empresa)}</b></div>`,
     r.nome && `<div><span>Respondente</span><b>${escapeHtml(r.nome)}</b></div>`,
     r.tel && `<div><span>Contato</span><b>${escapeHtml(r.tel)}</b></div>`,
+    r.email && `<div><span>E-mail</span><b>${escapeHtml(r.email)}</b></div>`,
   ].filter(Boolean).join("");
 
   doc.innerHTML = `
     <header class="pdf-cover">
       <div class="pdf-logo"><span class="pdf-dot"></span>CodeSants</div>
-      <div class="pk">Diagnóstico Estratégico · Confidencial</div>
-      <h1>Diagnóstico Estratégico</h1>
+      <div class="pk">Diagnóstico Inicial · Confidencial</div>
+      <h1>Diagnóstico Inicial da Empresa</h1>
       <p class="sub">Antes de qualquer proposta, entendemos profundamente o negócio. Este documento reúne as respostas do diagnóstico que vão orientar a estratégia e a construção do projeto.</p>
       ${whoRows ? `<div class="pdf-who">${whoRows}</div>` : ""}
       <div class="meta"><span>Gerado em <b>${new Date().toLocaleDateString("pt-BR")}</b></span><span>CodeSants · <b>${CONTACT.email}</b></span></div>
     </header>
     ${body}
-    <div class="pdf-foot"><span>CodeSants · Olhar Humano</span><span>Documento confidencial · gerado pelo Diagnóstico Estratégico</span></div>
+    <div class="pdf-foot"><span>CodeSants · Olhar Humano</span><span>Documento confidencial · gerado pelo Diagnóstico Inicial</span></div>
   `;
   document.body.appendChild(doc);
   return doc;
