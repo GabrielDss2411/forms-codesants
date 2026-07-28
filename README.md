@@ -7,7 +7,7 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 
 | Arquivo | O que é |
 |---|---|
-| [`diagnostico-estrategico.html`](./diagnostico-estrategico.html) | O formulário. Multi-step (estilo typeform), 24 perguntas (identificação + 3 partes) + intro + revisão. 100% autônomo (abra direto no navegador). |
+| [`index.html`](./index.html) | O formulário (Diagnóstico Estratégico). Multi-step (estilo typeform), 24 perguntas (identificação + 3 partes) + intro + revisão. 100% autônomo (abra direto no navegador). |
 | [`design-system.html`](./design-system.html) | Styleguide visual da CodeSants: cor, tipografia, componentes, forma e movimento. |
 | [`forms.md`](./forms.md) | As perguntas originais do diagnóstico (fonte de conteúdo). |
 | [`vercel.json`](./vercel.json) | Configuração de hospedagem estática na Vercel (rotas, cache, headers). |
@@ -27,7 +27,7 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 ### Editar as perguntas
 
 Todas as perguntas vivem no array `QUESTIONS` dentro do `<script>` de
-`diagnostico-estrategico.html`. Cada item tem `id`, `part`, `type`
+`index.html`. Cada item tem `id`, `part`, `type`
 (`long` | `text` | `tel` | `single` | `multi`), o texto (`q`, com trechos em `[...]` virando destaque verde),
 `hint`, `options` e `other`.
 
@@ -38,23 +38,25 @@ Site 100% estático — **sem build, sem dependências**. A Vercel serve os arqu
 Repositório: <https://github.com/GabrielDss2411/forms-codesants>
 
 1. Na Vercel: **Add New → Project → Import** o repositório `forms-codesants`.
-2. Framework Preset: **Other** (o `vercel.json` já força `framework: null`, sem build command e `outputDirectory: "."`).
+2. **Framework Preset: `Other`**. Root Directory `./`. Build Command, Output Directory e Install Command ficam **vazios / desligados** — não há build.
 3. Deploy. Cada push na `main` publica em produção; PRs geram preview.
+
+> Se aparecer **404: NOT_FOUND**, o Preset está errado (geralmente detectado como um framework com build) ou o Root Directory aponta para uma subpasta. Em *Settings → General*, volte para `Other` + `./` e faça **Redeploy**.
 
 ### Rotas
 
 | URL | Arquivo |
 |---|---|
-| `/` | `diagnostico-estrategico.html` |
-| `/diagnostico` | `diagnostico-estrategico.html` |
-| `/diagnostico-estrategico` | idem (`cleanUrls`) |
-| `/design` · `/design-system` | `design-system.html` |
+| `/` | `index.html` (o formulário) |
+| `/diagnostico` · `/diagnostico-estrategico` | redirect → `/` |
+| `/design-system` | `design-system.html` (`cleanUrls`) |
+| `/design` | redirect → `/design-system` |
 
-O HTML é servido com `must-revalidate` (atualização imediata após deploy) e o `logo.svg` com cache longo.
+O `logo.svg` é servido com cache longo; o HTML fica sob o cache padrão da Vercel para estáticos, revalidado a cada deploy.
 
 ### Rodando local
 
-Basta abrir o `.html` no navegador. Para simular as rotas da Vercel:
+Basta abrir o `index.html` no navegador. Para simular as rotas da Vercel:
 
 ```bash
 npx vercel dev
