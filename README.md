@@ -24,7 +24,8 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 - **Tela final**: fecha explicando o que acontece a seguir, em vez de um “Obrigado” seco (texto do `forms.md`). Sem vídeo.
 - **PDF direto**: ao concluir, o botão *Baixar PDF do diagnóstico* gera e baixa o documento na hora (perguntas + respostas, identificação na capa), sem diálogo de impressão. Usa `html2pdf` (via CDN, requer internet); offline, cai automaticamente para o "Salvar como PDF" da impressão. O nome do arquivo usa a empresa/nome do lead.
 - **Acessível**: labels, foco gerenciado, `prefers-reduced-motion`, responsivo mobile→desktop.
-- **Envio ao CRM**: ao concluir, faz `POST` para `CRM_ENDPOINT` (constante no topo do `<script>`). Vazio = não envia. Falha em silêncio de propósito — o formulário não pode depender do CRM estar no ar.
+- **Disponibilidade para a call**: a tela de encerramento coleta dias, períodos e uma observação, e anexa ao diagnóstico já gravado (`PATCH`). Vai também no PDF, para não se perder se o CRM estiver fora.
+- **Envio ao CRM**: ao concluir, faz `POST` para `CRM_ENDPOINT` (constante no topo do `<script>`) e guarda o `id` devolvido — é ele que permite o `PATCH` da disponibilidade. Vazio = não envia. O `POST` falha em silêncio de propósito (o formulário não pode depender do CRM estar no ar); já o `PATCH` avisa a pessoa e oferece o e-mail de contato, porque ela está esperando um retorno.
 
 ### Editar as perguntas
 
