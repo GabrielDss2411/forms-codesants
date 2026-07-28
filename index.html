@@ -223,19 +223,15 @@ input.inp-line::placeholder{color:var(--faint)}
   box-shadow:0 0 0 1px rgba(61,220,132,.3),0 0 40px rgba(61,220,132,.22)}
 .done h2{font-family:var(--font-display);font-weight:700;font-size:clamp(28px,4.5vw,42px);
   letter-spacing:-.02em;color:var(--ink-bright);margin:0}
+.done h2 .hl{background:linear-gradient(110deg,var(--brand),var(--brand-2));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
 .done p{color:var(--muted);font-size:16.5px;line-height:1.6;max-width:52ch;margin:18px auto 0}
-.thanks-video{position:relative;width:100%;max-width:540px;margin:24px auto 0;aspect-ratio:16/9;
-  border-radius:18px;overflow:hidden;border:1px solid rgba(61,220,132,.25);
-  background:linear-gradient(180deg,#0e1812,#0a130d);
-  box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 0 0 1px rgba(61,220,132,.05)}
-.thanks-video .tv-media{width:100%;height:100%;display:block;object-fit:cover;background:#000}
-.tv-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-  background:radial-gradient(circle at 50% 42%,rgba(61,220,132,.12),transparent 62%)}
-.tv-play{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font-size:20px;padding-left:4px;
-  color:var(--ink-invert);background:linear-gradient(135deg,var(--brand),var(--brand-2));
-  box-shadow:0 12px 34px rgba(61,220,132,.38)}
-.tv-ph-t{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2)}
-.done__next{color:var(--muted);font-size:15px;line-height:1.55;max-width:46ch;margin:22px auto 0}
+/* Primeira e última linhas do texto de fechamento, com um pouco mais de peso. */
+.done__lead{color:var(--ink)!important;font-size:18px!important;margin-top:22px!important}
+.done__sign{color:var(--brand-soft)!important;font-family:var(--font-display);font-weight:600;
+  font-size:18px!important;margin-top:26px!important}
+.done__next{color:var(--muted-2);font-size:14.5px;line-height:1.55;max-width:46ch;margin:30px auto 0;
+  padding-top:26px;border-top:1px solid var(--line-soft)}
 .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);z-index:60;
   background:var(--panel);border:1px solid rgba(61,220,132,.3);color:var(--ink);
@@ -355,15 +351,6 @@ input.inp-line::placeholder{color:var(--faint)}
 
 const CONTACT = { email: "contato@codesants.com.br" };
 
-/* Vídeo de agradecimento exibido na tela final.
-   Basta apontar para um arquivo local ou uma URL. Exemplos:
-     const THANKYOU_VIDEO  = "./obrigado.mp4";
-     const THANKYOU_VIDEO  = "https://.../recado.mp4";
-   THANKYOU_POSTER (opcional) é a imagem de capa antes do play, ex.: "./capa.jpg".
-   Enquanto estiver vazio, aparece um placeholder na identidade da marca. */
-const THANKYOU_VIDEO  = "";
-const THANKYOU_POSTER = "";
-
 /* Endpoint do CRM que recebe as respostas ao concluir o formulário.
    Vazio = não envia nada (o formulário segue funcionando normalmente).
    Preencha com a URL do CRM publicado, por exemplo:
@@ -390,109 +377,97 @@ const QUESTIONS = [
     q:["E o seu ","e-mail?"],
     hint:"Para onde enviamos o diagnóstico e a proposta.", ph:"voce@empresa.com.br" },
 
-  // Parte 1 · Conhecendo a empresa
-  { id:"q1", part:"Parte 1 · Conhecendo a empresa", type:"long",
-    q:["Conte um pouco sobre a ","história da empresa."],
-    hint:"Do jeito que achar mais natural.",
+  // Parte 1
+  { id:"q1", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
+    q:["Se sua empresa estivesse sentada na minha frente, ","como ela se apresentaria?"],
+    hint:"Conte a história do jeito que achar mais natural.",
     tags:["Como surgiu?","O que motivou a criação?","O que vocês fazem hoje?"],
     ph:"Escreva livremente…" },
-  { id:"q2", part:"Parte 1 · Conhecendo a empresa", type:"text",
-    q:["Se tivesse que resumir sua empresa ","em uma frase, qual seria?"],
-    hint:"Ex.: “Ajudamos empresas a…”, “Somos especialistas em…”, “Transformamos…”.",
-    ph:"Somos a empresa que…" },
-  { id:"q3", part:"Parte 1 · Conhecendo a empresa", type:"long",
-    q:["Quais são os principais ","produtos ou serviços da empresa?"],
-    hint:"Coloque em ordem de prioridade, se possível.",
+  { id:"q2", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
+    q:["O que faz vocês ","levantarem da cama todos os dias?"],
+    hint:"Além de vender um serviço, qual transformação vocês acreditam entregar aos clientes?",
+    ph:"A transformação que vocês entregam…" },
+  { id:"q3", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
+    q:["Qual é o serviço ou produto mais ","importante para o negócio hoje?"],
+    hint:"Se houver mais de um, coloque em ordem de prioridade.",
     ph:"1º… 2º… 3º…" },
+  { id:"q4", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
+    q:["Se eu indicasse sua empresa a um amigo, ","como você gostaria que eu a descrevesse?"],
+    hint:"Essa resposta normalmente revela muito sobre o posicionamento da marca.",
+    ph:"“É uma empresa que…”" },
 
-  // Parte 2 · Momento atual do negócio
-  { id:"q4", part:"Parte 2 · Momento atual do negócio", type:"single",
-    q:["Como você descreveria o ","momento atual da empresa?"],
-    hint:"Escolha o que melhor representa hoje.",
-    options:["Início das operações","Crescimento","Consolidação","Expansão","Reestruturação"], other:true },
-  { id:"q5", part:"Parte 2 · Momento atual do negócio", type:"long",
-    q:["Quais são os ","três maiores desafios"," da empresa hoje?"],
-    hint:"Pode incluir desafios comerciais, operacionais, financeiros ou de gestão.",
-    ph:"1º… 2º… 3º…" },
-  { id:"q6", part:"Parte 2 · Momento atual do negócio", type:"single",
+  // Parte 2
+  { id:"q5", part:"Parte 2 · Entendendo o momento da empresa", type:"long",
+    q:["Como está a empresa hoje?"],
+    hint:"Quais são os maiores desafios que vocês enfrentam atualmente?",
+    ph:"O momento atual e os principais desafios…" },
+  { id:"q6", part:"Parte 2 · Entendendo o momento da empresa", type:"long",
+    q:["De onde vêm a ","maioria dos seus clientes hoje?"],
+    hint:"Conte um pouco sobre como esse processo acontece.",
+    ph:"Indicação, redes sociais, tráfego pago, prospecção…" },
+  { id:"q7", part:"Parte 2 · Entendendo o momento da empresa", type:"multi",
+    q:["Quando um cliente decide contratar, ","o que costuma convencer a decisão?"],
+    hint:"Selecione tudo que se aplica.",
+    options:["Preço","Confiança","Rapidez","Especialização","Atendimento"], other:true },
+  { id:"q8", part:"Parte 2 · Entendendo o momento da empresa", type:"long",
+    q:["Existe alguma ","dificuldade recorrente para fechar vendas?"],
+    hint:"Quais perguntas ou objeções você mais escuta?",
+    ph:"As objeções que mais aparecem…" },
+  { id:"q9", part:"Parte 2 · Entendendo o momento da empresa", type:"single",
     q:["Em qual ","faixa de faturamento mensal"," a empresa se encontra?"],
-    hint:"Usado apenas para adequar a estratégia e a proposta ao porte da empresa. Totalmente confidencial.",
-    options:["Até R$ 20 mil","R$ 20 mil a R$ 50 mil","R$ 50 mil a R$ 100 mil","R$ 100 mil a R$ 300 mil","R$ 300 mil a R$ 1 milhão","Acima de R$ 1 milhão","Prefiro não informar"] },
-  { id:"q7", part:"Parte 2 · Momento atual do negócio", type:"long",
-    q:["Qual é a ","principal meta"," da empresa para os próximos 12 meses?"],
-    hint:"Aumentar faturamento, captar mais clientes, expandir para novas regiões, contratar equipe, estruturar processos, lançar novos serviços…",
+    hint:"Usado apenas como referência estratégica e mantido totalmente confidencial.",
+    options:["Até R$ 20 mil","R$ 20 mil a R$ 50 mil","R$ 50 mil a R$ 100 mil","R$ 100 mil a R$ 300 mil","Acima de R$ 300 mil","Prefiro não informar"] },
+  { id:"q10", part:"Parte 2 · Entendendo o momento da empresa", type:"long",
+    q:["Existe alguma ","meta importante para os próximos 12 meses?"],
+    hint:"Crescimento, expansão, contratação, aumento de faturamento…",
     ph:"Onde vocês querem chegar em 12 meses…" },
 
-  // Parte 3 · Marca e posicionamento
-  { id:"q8", part:"Parte 3 · Marca e posicionamento", type:"long",
-    q:["Como você gostaria que um cliente ","descrevesse sua empresa?"],
-    hint:"Ex.: confiável, premium, moderna, rápida, técnica, próxima, inovadora, referência no mercado.",
-    ph:"“É uma empresa que…”" },
-  { id:"q9", part:"Parte 3 · Marca e posicionamento", type:"long",
-    q:["Por que um cliente ","escolhe vocês e não um concorrente?"],
-    hint:"Se possível, cite uma situação real.",
-    ph:"O que faz a diferença na hora da escolha…" },
-  { id:"q10", part:"Parte 3 · Marca e posicionamento", type:"long",
-    q:["Existe alguma percepção que vocês ","definitivamente NÃO querem transmitir?"],
-    hint:"Ex.: empresa pequena, amadora, cara, popular, distante, fria, desorganizada.",
-    ph:"O que precisa ficar longe da marca…" },
-  { id:"q11", part:"Parte 3 · Marca e posicionamento", type:"long",
-    q:["Existem empresas cuja comunicação ou ","posicionamento vocês admiram?"],
-    hint:"Pode ser do mesmo segmento ou não. Se tiver, envie links.",
-    ph:"Marcas de referência (com links, se tiver)…" },
-
-  // Parte 4 · Clientes e vendas
-  { id:"q12", part:"Parte 4 · Clientes e vendas", type:"long",
-    q:["Quem é o ","cliente ideal da empresa?"],
-    hint:"Descreva o tipo de cliente que vocês mais gostam de atender.",
+  // Parte 3
+  { id:"q11", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Nos primeiros 10 segundos no site, ","o que o visitante deveria pensar?"],
+    hint:"Essa resposta vai definir toda a comunicação da página inicial.",
+    ph:"“Nossa, essa empresa…”" },
+  { id:"q12", part:"Parte 3 · Um site que realmente gere resultado", type:"single",
+    q:["Depois desses 10 segundos, ","qual deveria ser a próxima atitude?"],
+    hint:"A ação principal que o site deve provocar.",
+    options:["Pedir orçamento","Enviar mensagem","Agendar uma reunião","Ligar","Conhecer um serviço"], other:true },
+  { id:"q13", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Quem é o ","cliente ideal da sua empresa?"],
+    hint:"Não pense em “todo mundo”. Pense em quem você gostaria de atender todos os dias.",
     ph:"A pessoa ou empresa dos sonhos para atender…" },
-  { id:"q13", part:"Parte 4 · Clientes e vendas", type:"multi",
-    q:["Como um cliente ","normalmente conhece vocês?"],
-    hint:"Selecione tudo que se aplica.",
-    options:["Instagram","Google","Indicação","WhatsApp","LinkedIn","Tráfego pago"], other:true },
-  { id:"q14", part:"Parte 4 · Clientes e vendas", type:"multi",
-    q:["O que normalmente faz um cliente ","fechar negócio com vocês?"],
-    hint:"Selecione tudo que se aplica.",
-    options:["Preço","Confiança","Especialização","Rapidez","Atendimento","Indicação"], other:true },
-  { id:"q15", part:"Parte 4 · Clientes e vendas", type:"long",
-    q:["Existe alguma ","dificuldade recorrente para fechar vendas?"],
-    hint:"Quais objeções ou dúvidas vocês mais escutam?",
-    ph:"As objeções que mais aparecem…" },
-
-  // Parte 5 · Operação e processos
-  { id:"q16", part:"Parte 5 · Operação e processos", type:"long",
-    q:["Depois que um cliente fecha negócio, ","como funciona o processo até a entrega?"],
-    hint:"Descreva resumidamente o fluxo de atendimento.",
-    ph:"Do aceite até a entrega…" },
-  { id:"q17", part:"Parte 5 · Operação e processos", type:"long",
-    q:["Quais atividades mais ","consomem tempo da equipe ou geram retrabalho?"],
-    hint:"Ex.: atendimento no WhatsApp, envio de propostas, organização de informações, planilhas, agendamentos, cobranças, emissão de documentos.",
-    ph:"O que trava o dia a dia…" },
-  { id:"q18", part:"Parte 5 · Operação e processos", type:"multi",
-    q:["Quais ","ferramentas ou sistemas"," vocês utilizam atualmente?"],
-    hint:"Selecione tudo que se aplica.",
-    options:["WhatsApp","Planilhas (Excel/Google Sheets)","ERP","CRM","Agenda online","Sistema próprio"], other:true },
-
-  // Parte 6 · Tecnologia e oportunidades
-  { id:"q19", part:"Parte 6 · Tecnologia e oportunidades", type:"long",
-    q:["Se a tecnologia pudesse resolver ","apenas um problema da empresa hoje, qual seria?"],
-    hint:"Ajuda a identificar oportunidades com automações, integrações, inteligência artificial ou sistemas personalizados.",
-    ph:"O problema que mais dói…" },
-  { id:"q20", part:"Parte 6 · Tecnologia e oportunidades", type:"long",
-    q:["Além do site, existe algo que poderia ","ser melhorado com tecnologia?"],
-    hint:"Algum processo, ideia ou necessidade — mesmo que ainda não exista um projeto definido.",
-    ph:"O que você imagina, mesmo sem forma ainda…" },
-
-  // Materiais disponíveis
-  { id:"q21", part:"Materiais disponíveis", type:"multi",
+  { id:"q14", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Por que um cliente ","escolhe vocês e não um concorrente?"],
+    hint:"Se puder, conte situações reais.",
+    ph:"O que faz a diferença na hora da escolha…" },
+  { id:"q15", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Existe algum serviço que vocês ","gostariam de vender mais?"],
+    hint:"Mesmo que hoje ele não seja o mais procurado.",
+    ph:"O serviço que merece mais holofote…" },
+  { id:"q16", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Quais dúvidas os clientes têm ","antes de contratar vocês?"],
+    hint:"Provavelmente serão respondidas dentro do próprio site.",
+    ph:"As perguntas que aparecem antes do sim…" },
+  { id:"q17", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Se um concorrente visitasse seu site, ","o que gostaria que ele percebesse?"],
+    hint:"Costuma revelar o verdadeiro diferencial competitivo.",
+    ph:"O que você quer que a concorrência veja…" },
+  { id:"q18", part:"Parte 3 · Um site que realmente gere resultado", type:"multi",
+    q:["Existe algo que você ","definitivamente NÃO quer transmitir?"],
+    hint:"Selecione o que quer evitar e complemente se precisar.",
+    options:["Empresa pequena","Empresa amadora","Empresa cara","Empresa popular","Empresa fria","Empresa distante"], other:true },
+  { id:"q19", part:"Parte 3 · Um site que realmente gere resultado", type:"long",
+    q:["Quais empresas transmitem uma ","imagem que você admira?"],
+    hint:"Podem ser do seu segmento ou não. Pode enviar links: o objetivo não é copiar, mas entender referências.",
+    ph:"Marcas de referência (com links, se tiver)…" },
+  { id:"q20", part:"Parte 3 · Um site que realmente gere resultado", type:"multi",
     q:["Quais ","materiais vocês já possuem?"],
     hint:"Selecione tudo que já está pronto.",
-    options:["Logo","Manual da marca","Identidade visual","Fotos profissionais","Vídeos","Portfólio","Cases","Depoimentos","Avaliações de clientes"], other:true },
+    options:["Logo","Manual da marca","Fotos profissionais","Vídeos","Depoimentos","Cases","Avaliações","Portfólio"], other:true },
 
   // Final
-  { id:"q22", part:"A pergunta mais importante", type:"long", featured:true,
-    q:["Daqui a um ano, você diz: ",["“esse projeto superou completamente minhas expectativas”"],". O que precisaria ter acontecido?"],
-    hint:"Aumento de vendas, fortalecimento da marca, ganho de produtividade, redução de retrabalho, automação de processos, melhoria da experiência do cliente — ou qualquer outro impacto importante.",
+  { id:"q21", part:"A última pergunta, e a mais importante", type:"long", featured:true,
+    q:["Daqui a um ano, você diz: ",["“esse projeto superou minhas expectativas”"],". O que precisaria ter acontecido?"],
+    hint:"Não pense apenas no site em si, mas nos resultados que ele teria gerado para a sua empresa.",
     ph:"O cenário de sucesso, um ano depois…" },
 ];
 
@@ -701,25 +676,20 @@ function answerText(qd){
   return base;
 }
 
-/* ---- Concluído ---- */
+/* ---- Concluído ----
+   Fecha com uma leitura, não com um "Obrigado" seco: diz o que acontece
+   agora e quando a pessoa volta a ter notícia. Texto fiel ao forms.md. */
 function buildDone(){
   const s = el("section","done");
-  const videoLayer = THANKYOU_VIDEO
-    ? `<video class="tv-media" controls playsinline preload="metadata"${THANKYOU_POSTER ? ` poster="${THANKYOU_POSTER}"` : ""}>
-         <source src="${THANKYOU_VIDEO}" />
-         Seu navegador não consegue reproduzir este vídeo.
-       </video>`
-    : `<div class="tv-ph" aria-label="Espaço reservado para o vídeo de agradecimento">
-         <span class="tv-play animate-pulse-soft">▶</span>
-         <span class="tv-ph-t">Mensagem em vídeo da CodeSants</span>
-       </div>`;
-
   s.innerHTML = `
     <div class="done__check">✓</div>
-    <h2>Tudo certo. Obrigado!</h2>
-    <p>Gravei um recado rápido pra você:</p>
-    <div class="thanks-video">${videoLayer}</div>
-    <p class="done__next">Baixe o PDF do seu diagnóstico com as perguntas e respostas.</p>
+    <h2>Estamos <span class="hl">quase lá…</span></h2>
+    <p class="done__lead">Muito obrigado por dedicar esse tempo.</p>
+    <p>Acredito que entender o seu negócio é muito mais importante do que simplesmente criar um site bonito.</p>
+    <p>Agora vou analisar cuidadosamente cada resposta para montar uma proposta alinhada ao momento da sua empresa, aos seus objetivos e às oportunidades de crescimento que identifiquei.</p>
+    <p>Caso eu encontre algum ponto que mereça ser aprofundado, entrarei em contato antes de elaborar a proposta. Prefiro fazer menos promessas e entregar uma solução que realmente faça sentido para o seu negócio.</p>
+    <p class="done__sign">Nos falamos em breve!</p>
+    <p class="done__next">Se quiser, leve uma cópia das suas respostas.</p>
     <div class="actions">
       <button class="btn btn--go" id="doPdf" type="button">Baixar PDF do diagnóstico ↓</button>
     </div>

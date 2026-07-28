@@ -1,4 +1,4 @@
-# Diagnóstico Inicial da Empresa · CodeSants
+# Diagnóstico Estratégico · CodeSants
 
 Experiência de formulário e design system, na identidade visual do site CodeSants
 (dark verde-esmeralda, Space Grotesk / Hanken Grotesk / Space Mono, acentos luminosos).
@@ -7,7 +7,7 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 
 | Arquivo | O que é |
 |---|---|
-| [`index.html`](./index.html) | O formulário. Multi-step (estilo typeform), 26 telas (4 de identificação + 22 perguntas em 7 seções) + intro e revisão. 100% autônomo (abra direto no navegador). |
+| [`index.html`](./index.html) | O formulário. Multi-step (estilo typeform), 25 telas (4 de identificação + 21 perguntas em 3 partes) + intro e revisão. 100% autônomo (abra direto no navegador). |
 | [`design-system.html`](./design-system.html) | Styleguide visual da CodeSants: cor, tipografia, componentes, forma e movimento. |
 | [`forms.md`](./forms.md) | As perguntas do diagnóstico (fonte de conteúdo). O `index.html` deve espelhar este arquivo. |
 | [`vercel.json`](./vercel.json) | Configuração de hospedagem estática na Vercel (rotas, cache, headers). |
@@ -20,7 +20,7 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 - **Teclado**: `Enter` avança · `Shift+Enter` nova linha · teclas `1–9` selecionam opções.
 - **Navegação livre**: nada bloqueia o avanço e nada é salvo entre sessões (fase de testes).
 - **Tela de revisão**: clique em qualquer resposta para editar antes de enviar.
-- **Recado em vídeo**: a tela final tem uma camada de vídeo de agradecimento. Aponte a constante `THANKYOU_VIDEO` (e, opcional, `THANKYOU_POSTER`) no topo do `<script>` para um arquivo local ou URL; vazio mostra um placeholder na marca.
+- **Tela final**: fecha explicando o que acontece a seguir, em vez de um “Obrigado” seco (texto do `forms.md`). Sem vídeo.
 - **PDF direto**: ao concluir, o botão *Baixar PDF do diagnóstico* gera e baixa o documento na hora (perguntas + respostas, identificação na capa), sem diálogo de impressão. Usa `html2pdf` (via CDN, requer internet); offline, cai automaticamente para o "Salvar como PDF" da impressão. O nome do arquivo usa a empresa/nome do lead.
 - **Acessível**: labels, foco gerenciado, `prefers-reduced-motion`, responsivo mobile→desktop.
 - **Envio ao CRM**: ao concluir, faz `POST` para `CRM_ENDPOINT` (constante no topo do `<script>`). Vazio = não envia. Falha em silêncio de propósito — o formulário não pode depender do CRM estar no ar.
