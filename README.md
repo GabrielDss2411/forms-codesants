@@ -18,7 +18,8 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 - **Identificação no início**: nome, telefone/WhatsApp, empresa e e-mail de quem responde.
 - **Tipos de campo**: texto curto, texto longo, telefone, e-mail, escolha única (avanço automático) e múltipla escolha com “Outro”. Uma pergunta de múltipla escolha pode ter `detail`: um campo de texto abaixo das opções, guardado em `<id>__detalhe` (usado na 21, onde marcar a área não responde — o relato responde).
 - **Teclado**: `Enter` avança · `Shift+Enter` nova linha · teclas `1–9` selecionam opções.
-- **Navegação livre**: nada bloqueia o avanço e nada é salvo entre sessões (fase de testes).
+- **Todas as perguntas obrigatórias**: não se avança sem responder, e o botão diz o que falta. Voltar é sempre livre; quem edita pela revisão é devolvido para lá. E-mail precisa ter formato válido; telefone, ao menos 10 dígitos — contato inválido é um lead que não dá para alcançar.
+- **Nada é salvo entre sessões** (fase de testes).
 - **Transição de parte**: cada parte abre com uma tela de capítulo. As que têm texto em `PART_INTROS` (hoje a Parte 4) **não somem sozinhas** — existem para serem lidas e esperam a pessoa avançar.
 - **Tela de revisão**: clique em qualquer resposta para editar antes de enviar.
 - **Tela final**: fecha explicando o que acontece a seguir, em vez de um “Obrigado” seco (texto do `forms.md`). Sem vídeo.
