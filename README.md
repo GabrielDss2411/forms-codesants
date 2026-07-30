@@ -16,13 +16,13 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 
 - **Multi-step imersivo**: uma pergunta por tela, barra de progresso, transições com easing expo e telas de capítulo entre as partes.
 - **Identificação no início**: nome, telefone/WhatsApp, empresa e e-mail de quem responde.
-- **Tipos de campo**: texto curto, texto longo, telefone, e-mail, escolha única (avanço automático) e múltipla escolha com “Outro”. Uma pergunta de múltipla escolha pode ter `detail`: um campo de texto abaixo das opções, guardado em `<id>__detalhe` (usado na 21, onde marcar a área não responde — o relato responde).
+- **Tipos de campo**: texto curto, texto longo, telefone, e-mail, escolha única e múltipla escolha com “Outro”. Marcar uma opção **não** avança sozinho: quem passa de tela é a pessoa, com `Enter` ou *Continuar*. Uma pergunta de múltipla escolha pode ter `detail`: um campo de texto abaixo das opções, guardado em `<id>__detalhe` (usado na 21, onde marcar a área não responde — o relato responde).
 - **Teclado**: `Enter` avança · `Shift+Enter` nova linha · teclas `1–9` selecionam opções.
 - **Todas as perguntas obrigatórias**: não se avança sem responder, e o botão diz o que falta. Voltar é sempre livre; quem edita pela revisão é devolvido para lá. E-mail precisa ter formato válido; telefone, ao menos 10 dígitos — contato inválido é um lead que não dá para alcançar.
 - **Nada é salvo entre sessões** (fase de testes).
 - **Transição de parte**: cada parte abre com uma tela de capítulo. As que têm texto em `PART_INTROS` (hoje a Parte 4) **não somem sozinhas** — existem para serem lidas e esperam a pessoa avançar.
 - **Tela de revisão**: clique em qualquer resposta para editar antes de enviar.
-- **Tela final**: fecha explicando o que acontece a seguir, em vez de um “Obrigado” seco (texto do `forms.md`). Sem vídeo.
+- **Duas telas de fecho**: o *encerramento* explica o que acontece a seguir (texto do `forms.md`) e coleta a disponibilidade; enviada a agenda, a *confirmação* avisa que o envio terminou e recapitula o que foi registrado. Falha no envio mantém a pessoa no encerramento, com o e-mail de contato — nunca confirma o que não foi gravado.
 - **PDF direto**: ao concluir, o botão *Baixar PDF do diagnóstico* gera e baixa o documento na hora (perguntas + respostas, identificação na capa), sem diálogo de impressão. Usa `html2pdf` (via CDN, requer internet); offline, cai automaticamente para o "Salvar como PDF" da impressão. O nome do arquivo usa a empresa/nome do lead.
 - **Acessível**: labels, foco gerenciado, `prefers-reduced-motion`, responsivo mobile→desktop.
 - **Disponibilidade para a call**: a tela de encerramento coleta dias, períodos e uma observação, e anexa ao diagnóstico já gravado (`PATCH`). Vai também no PDF, para não se perder se o CRM estiver fora.

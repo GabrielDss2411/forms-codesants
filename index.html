@@ -276,6 +276,19 @@ textarea.inp.detail{margin-top:14px;min-height:104px;font-size:15.5px}
 .agenda__msg.is-ok{color:var(--brand-soft)}
 .agenda__msg.is-warn{color:#e8c07a}
 .agenda__msg a{color:var(--brand)}
+
+/* ---------- Tela de confirmação final ---------- */
+.fim-card{margin:30px auto 0;max-width:460px;text-align:left;
+  background:var(--surface-2);border:1px solid rgba(61,220,132,.22);border-radius:16px;padding:20px 22px}
+.fim-card__t{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--brand);margin-bottom:14px}
+.fim-linha{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:9px 0;border-top:1px solid var(--line-soft)}
+.fim-linha:first-of-type{border-top:0;padding-top:0}
+.fim-linha span{font-size:13px;color:var(--muted-2);flex-shrink:0}
+.fim-linha b{font-size:14px;color:var(--ink);font-weight:500;text-align:right}
+.fim .actions{margin-top:30px}
+.fim .btn--back{padding:14px 22px;border:1px solid var(--line);border-radius:999px;text-decoration:none}
 .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);z-index:60;
   background:var(--panel);border:1px solid rgba(61,220,132,.3);color:var(--ink);
@@ -550,7 +563,7 @@ const PARTS = [...new Set(QUESTIONS.map(q => q.part))];   // partes únicas, em 
 /* ---- Estado ---- */
 let answers = {};        // { qid: string | string[], qid__other: string }
 let idx = -1;            // -1 intro · 0..TOTAL-1 perguntas · TOTAL review · TOTAL+1 done
-const REVIEW = TOTAL, DONE = TOTAL + 1;
+const REVIEW = TOTAL, DONE = TOTAL + 1, FIM = TOTAL + 2;
 
 /* ---- Persistência desativada nesta etapa (navegação livre, sem salvar) ---- */
 function save(){ /* no-op */ }
@@ -573,7 +586,7 @@ const btnNext = document.getElementById("btnNext");
 function render(){
   // progress + topbar
   if(idx < 0){ rail.style.width = "0%"; topMeta.innerHTML = "Diagnóstico Inicial"; navBar.hidden = true; }
-  else if(idx >= REVIEW){ rail.style.width = "100%"; topMeta.innerHTML = idx===DONE ? "Concluído" : "Revisão final"; }
+  else if(idx >= REVIEW){ rail.style.width = "100%"; topMeta.innerHTML = idx===FIM ? "Enviado" : idx===DONE ? "Concluído" : "Revisão final"; }
   else{ rail.style.width = ((idx+1)/TOTAL*100)+"%"; topMeta.innerHTML = `Pergunta <b>${idx+1}</b> / ${TOTAL}`; }
 
   const old = wrap.querySelector(".step.is-active");
@@ -583,6 +596,7 @@ function render(){
     if(idx < 0) node = buildIntro();
     else if(idx === REVIEW) node = buildReview();
     else if(idx === DONE) node = buildDone();
+    else if(idx === FIM) node = buildFim();
     else node = buildQuestion(QUESTIONS[idx]);
     node.classList.add("step");
     wrap.appendChild(node);
@@ -704,7 +718,7 @@ function toggle(qd,opt,box,shape,ow){
     answers[qd.id]=opt;
     box.querySelectorAll(".choice").forEach(c=>c.classList.toggle("is-on", c.dataset.val===opt));
     save(); syncNav(qd);
-    if(opt!=="__other") setTimeout(avancar, 240);   // avanço automático (single)
+    // Sem avanço automático: quem decide passar é a pessoa, com Enter ou Continuar.
   } else {
     let arr = Array.isArray(answers[qd.id]) ? answers[qd.id].slice() : [];
     const i = arr.indexOf(opt);
@@ -792,6 +806,50 @@ function buildDone(){
   return s;
 }
 
+/* ---- Confirmação final ----
+   Fecha o ciclo: diz que o envio terminou e repete o que foi registrado, para
+   a pessoa não sair na dúvida se a agenda foi mesmo anotada. */
+function buildFim(){
+  const s = el("section","done fim");
+  const r = respondent();
+  const dias = agenda.dias.length ? agenda.dias.join(", ") : null;
+  const periodos = agenda.periodos.length
+    ? agenda.periodos.map(n => { const p = PERIODOS.find(x=>x.nome===n); return p ? `${p.nome} (${p.faixa})` : n; }).join(", ")
+    : null;
+  const obs = (agenda.observacao||"").trim();
+
+  const linha = (rot, val) => val
+    ? `<div class="fim-linha"><span>${escapeHtml(rot)}</span><b>${escapeHtml(val)}</b></div>`
+    : "";
+
+  s.innerHTML = `
+    <div class="done__check">✓</div>
+    <h2>Envio <span class="hl">concluído!</span></h2>
+    <p class="done__lead">Obrigado, ${escapeHtml(r.nome.split(/\s+/)[0] || "de verdade")}. Está tudo registrado aqui.</p>
+    <p>Recebi o seu diagnóstico e a sua disponibilidade. Vou analisar as respostas com calma e entro em contato nos horários que você indicou.</p>
+
+    <div class="fim-card">
+      <div class="fim-card__t">O que foi registrado</div>
+      ${linha("Diagnóstico", "todas as respostas enviadas")}
+      ${linha("Empresa", r.empresa)}
+      ${linha("Contato", r.tel)}
+      ${linha("E-mail", r.email)}
+      ${linha("Melhores dias", dias)}
+      ${linha("Períodos", periodos)}
+      ${obs ? linha("Observação", obs) : ""}
+    </div>
+
+    <p class="done__sign">Nos falamos em breve!</p>
+    <p class="done__next">Se quiser guardar uma cópia das suas respostas:</p>
+    <div class="actions">
+      <button class="btn btn--go" id="doPdfFim" type="button">Baixar PDF do diagnóstico ↓</button>
+      <a class="btn btn--back" href="https://codesants.com.br" target="_blank" rel="noreferrer">Conhecer a CodeSants →</a>
+    </div>
+  `;
+  s.querySelector("#doPdfFim").addEventListener("click", generatePdf);
+  return s;
+}
+
 /* ---- Disponibilidade para a call ----
    Fica no encerramento, depois de o diagnóstico já ter sido gravado: quem
    fechar a aba aqui não perde nada, só deixa de marcar horário. */
@@ -872,11 +930,10 @@ function wireAgenda(root){
       observacao: agenda.observacao.trim(),
     })
       .then(()=>{
+        // Sucesso encerra o fluxo numa tela própria de confirmação.
         msg.className = "agenda__msg is-ok";
-        msg.textContent = "Perfeito, anotado. Entro em contato nesses horários.";
-        root.querySelectorAll(".chip-sel").forEach(c=>c.disabled = true);
-        obs.disabled = true;
-        btn.textContent = "Disponibilidade enviada ✓";
+        msg.textContent = "Anotado!";
+        go(FIM);
       })
       .catch(err=>{
         // Sem CRM no ar não dá para prometer que foi registrado.
@@ -992,7 +1049,7 @@ function printFallback(){
 }
 /* ---- Navegação ---- */
 function setupNav(){
-  if(idx<0 || idx===DONE){ navBar.hidden=true; return; }
+  if(idx<0 || idx>=DONE){ navBar.hidden=true; return; }
   navBar.hidden=false;
   btnBack.style.visibility = idx===0 ? "hidden" : "visible";
   btnBack.textContent = "← Voltar";
@@ -1081,7 +1138,7 @@ function syncNav(){
 
 function go(n){
   const forward = n > idx;
-  n = Math.max(-1, Math.min(DONE, n));
+  n = Math.max(-1, Math.min(FIM, n));
   // Anuncia a troca de parte ao AVANÇAR para a 1ª pergunta de uma nova parte.
   const entersNewPart = forward && n > 0 && n < TOTAL && QUESTIONS[n].part !== QUESTIONS[n-1].part;
   const conclui = n === DONE && idx !== DONE;
@@ -1219,7 +1276,7 @@ function focusStep(){
 }
 
 /* Único caminho de avanço, para a regra valer em qualquer gatilho:
-   botão, Enter ou avanço automático da escolha única. */
+   botão ou Enter. */
 function avancar(){
   if(idx === REVIEW){
     const falta = primeiraIncompleta();
