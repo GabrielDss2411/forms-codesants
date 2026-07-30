@@ -12,9 +12,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
-<!-- Geração de PDF direto no navegador (download sem diálogo de impressão) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.3/html2pdf.bundle.min.js" defer></script>
-
 <style>
 /* ============================================================
    CodeSants · Design tokens (espelham web/app/globals.css)
@@ -269,8 +266,6 @@ textarea.inp.detail{margin-top:14px;min-height:104px;font-size:15.5px}
 .done__lead{color:var(--ink)!important;font-size:18px!important;margin-top:22px!important}
 .done__sign{color:var(--brand-soft)!important;font-family:var(--font-display);font-weight:600;
   font-size:18px!important;margin-top:26px!important}
-.done__next{color:var(--muted-2);font-size:14.5px;line-height:1.55;max-width:46ch;margin:30px auto 0;
-  padding-top:26px;border-top:1px solid var(--line-soft)}
 
 /* ---------- Disponibilidade para a call (tela de encerramento) ---------- */
 .agenda{margin:38px auto 0;max-width:560px;text-align:left;
@@ -318,7 +313,7 @@ textarea.inp.detail{margin-top:14px;min-height:104px;font-size:15.5px}
 .fim-linha span{font-size:13px;color:var(--muted-2);flex-shrink:0}
 .fim-linha b{font-size:14px;color:var(--ink);font-weight:500;text-align:right}
 .fim .actions{margin-top:30px}
-.fim .btn--back{padding:14px 22px;border:1px solid var(--line);border-radius:999px;text-decoration:none}
+.fim .actions .btn{text-decoration:none}
 .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:34px}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);z-index:60;
   background:var(--panel);border:1px solid rgba(61,220,132,.3);color:var(--ink);
@@ -359,53 +354,6 @@ textarea.inp.detail{margin-top:14px;min-height:104px;font-size:15.5px}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .chapter-ov,.chapter-ov .num,.chapter-ov h2,.chapter-ov .segs,.chapter-ov .tap{opacity:1;transform:none}
-}
-
-/* ============================================================
-   Documento PDF (relatório) — layout claro "papel", acentos verdes.
-   Oculto na tela; renderizado em .pdf-capture (download via html2pdf)
-   ou no fallback de impressão.
-   ============================================================ */
-.pdf-doc{display:none;background:#fff;color:#0d1b13;font-family:var(--font-sans)}
-.pdf-doc.pdf-capture{display:block;position:static;width:794px;margin:0;
-  padding:44px 46px;box-sizing:border-box}
-/* overlay que cobre a tela enquanto o PDF é rasterizado */
-.pdf-loading{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:20px;
-  background:radial-gradient(circle at 50% 40%,rgba(61,220,132,.14),transparent 60%),var(--bg)}
-.pdf-loading .spin{width:52px;height:52px;border-radius:50%;
-  border:3px solid rgba(61,220,132,.2);border-top-color:var(--brand);animation:csSpin .8s linear infinite}
-.pdf-loading .lbl{font-family:var(--font-mono);font-size:12px;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--brand-soft)}
-
-.pdf-cover{padding-bottom:26px;margin-bottom:30px;border-bottom:2px solid #14b866;page-break-after:avoid}
-.pdf-cover .pdf-logo{display:flex;align-items:center;gap:9px;font-family:var(--font-display);
-  font-weight:700;font-size:26px;letter-spacing:-.01em;color:#14b866;margin-bottom:24px}
-.pdf-cover .pdf-dot{width:9px;height:9px;border-radius:50%;background:#14b866;display:inline-block}
-.pdf-cover .pk{font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#12a85c;margin-bottom:10px}
-.pdf-cover h1{font-family:var(--font-display);font-weight:700;font-size:34px;letter-spacing:-.02em;line-height:1.05;color:#0a1a11;margin:0}
-.pdf-cover .sub{color:#3f574a;font-size:12.5px;line-height:1.6;max-width:70ch;margin:14px 0 0}
-.pdf-cover .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:#5a7365;text-transform:uppercase}
-.pdf-cover .meta b{color:#12a85c;font-weight:700}
-.pdf-who{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px}
-.pdf-who div{flex:1;min-width:150px;border:1px solid #cfe9da;border-radius:10px;padding:11px 14px;background:#f2faf5}
-.pdf-who span{display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#5a8a70;margin-bottom:4px}
-.pdf-who b{font-family:var(--font-display);font-size:14px;color:#0a1a11;font-weight:600}
-.pdf-part{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#0f8a4d;margin:24px 0 14px;padding-bottom:7px;border-bottom:1px solid #cfe9da;page-break-after:avoid;break-after:avoid}
-.pdf-qa{margin:0 0 16px;page-break-inside:avoid;break-inside:avoid}
-.pdf-q{display:flex;gap:10px;font-family:var(--font-display);font-weight:600;font-size:13px;line-height:1.35;color:#0a1a11}
-.pdf-q .qn{color:#14b866;font-family:var(--font-mono);font-weight:700;font-size:12px}
-.pdf-a{margin:6px 0 0 26px;padding-left:14px;border-left:2px solid #7fe3ab;font-size:12.5px;line-height:1.6;color:#243b30;white-space:pre-wrap}
-.pdf-a.empty{color:#9bb0a4;font-style:italic;border-left-color:#e2ede7}
-.pdf-foot{margin-top:26px;padding-top:12px;border-top:1px solid #cfe9da;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.05em;color:#7a8f82;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-
-/* Fallback: se o download direto não estiver disponível, imprime */
-@page{ size:A4; margin:18mm 16mm 20mm; }
-@media print{
-  html,body{background:#fff!important}
-  .bg-fx,.bg-orb,.rail,.top,.stage,.nav,.toast{display:none!important}
-  .pdf-doc,.pdf-doc.pdf-capture{display:block;position:static;left:auto;top:auto;width:auto;padding:0;z-index:auto;
-    -webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
@@ -973,12 +921,7 @@ function buildDone(){
     <p>Se durante essa análise eu perceber que existe uma solução mais adequada do que a inicialmente imaginada, entrarei em contato antes de montar a proposta. Prefiro recomendar o que realmente gera resultado para o seu negócio do que entregar apenas aquilo que foi solicitado.</p>
     <p class="done__sign">Nos falamos em breve!</p>
     ${buildAgendaHtml()}
-    <p class="done__next">Se quiser, leve uma cópia das suas respostas.</p>
-    <div class="actions">
-      <button class="btn btn--go" id="doPdf" type="button">Baixar PDF do diagnóstico ↓</button>
-    </div>
   `;
-  s.querySelector("#doPdf").addEventListener("click", generatePdf);
   wireAgenda(s);
   return s;
 }
@@ -1017,13 +960,10 @@ function buildFim(){
     </div>
 
     <p class="done__sign">Nos falamos em breve!</p>
-    <p class="done__next">Se quiser guardar uma cópia das suas respostas:</p>
     <div class="actions">
-      <button class="btn btn--go" id="doPdfFim" type="button">Baixar PDF do diagnóstico ↓</button>
-      <a class="btn btn--back" href="https://codesants.com.br" target="_blank" rel="noreferrer">Conhecer a CodeSants →</a>
+      <a class="btn btn--go" href="https://codesants.com.br" target="_blank" rel="noreferrer">Conhecer a CodeSants →</a>
     </div>
   `;
-  s.querySelector("#doPdfFim").addEventListener("click", generatePdf);
   return s;
 }
 
@@ -1122,108 +1062,6 @@ function wireAgenda(root){
   });
 }
 
-/* ---- Documento / PDF ---- */
-/* A agenda também vai no PDF: se o CRM estiver fora do ar, é o registro que
-   sobra do que a pessoa combinou. */
-function agendaPdfHtml(){
-  const partes = [];
-  if(agenda.dias.length) partes.push(`<div class="pdf-qa"><div class="pdf-q"><span>Dias</span></div><div class="pdf-a">${escapeHtml(agenda.dias.join(", "))}</div></div>`);
-  if(agenda.periodos.length) partes.push(`<div class="pdf-qa"><div class="pdf-q"><span>Períodos</span></div><div class="pdf-a">${escapeHtml(agenda.periodos.join(", "))}</div></div>`);
-  const obs = (agenda.observacao||"").trim();
-  if(obs) partes.push(`<div class="pdf-qa"><div class="pdf-q"><span>Observação</span></div><div class="pdf-a">${escapeHtml(obs)}</div></div>`);
-  if(!partes.length) return "";
-  return `<div class="pdf-part">Disponibilidade para a call</div>${partes.join("")}`;
-}
-
-function buildPdfDoc(){
-  document.querySelectorAll(".pdf-doc").forEach(n=>n.remove());
-  const doc = el("div","pdf-doc");
-  let curPart = "", body = "";
-  QUESTIONS.forEach((qd,i)=>{
-    if(qd.part!==curPart){ curPart=qd.part; body += `<div class="pdf-part">${escapeHtml(curPart)}</div>`; }
-    const a = answerText(qd);
-    body += `<div class="pdf-qa">
-      <div class="pdf-q"><span class="qn">${String(i+1).padStart(2,"0")}</span><span>${escapeHtml(shortQ(qd))}</span></div>
-      <div class="pdf-a ${a?"":"empty"}">${a?escapeHtml(a):"não respondido"}</div>
-    </div>`;
-  });
-  const r = respondent();
-  const whoRows = [
-    r.empresa && `<div><span>Empresa</span><b>${escapeHtml(r.empresa)}</b></div>`,
-    r.nome && `<div><span>Respondente</span><b>${escapeHtml(r.nome)}</b></div>`,
-    r.tel && `<div><span>Contato</span><b>${escapeHtml(r.tel)}</b></div>`,
-    r.email && `<div><span>E-mail</span><b>${escapeHtml(r.email)}</b></div>`,
-  ].filter(Boolean).join("");
-
-  doc.innerHTML = `
-    <header class="pdf-cover">
-      <div class="pdf-logo"><span class="pdf-dot"></span>CodeSants</div>
-      <div class="pk">Diagnóstico Inicial · Confidencial</div>
-      <h1>Diagnóstico Inicial da Empresa</h1>
-      <p class="sub">Antes de qualquer proposta, entendemos profundamente o negócio. Este documento reúne as respostas do diagnóstico que vão orientar a estratégia e a construção do projeto.</p>
-      ${whoRows ? `<div class="pdf-who">${whoRows}</div>` : ""}
-      <div class="meta"><span>Gerado em <b>${new Date().toLocaleDateString("pt-BR")}</b></span><span>CodeSants · <b>${CONTACT.email}</b></span></div>
-    </header>
-    ${body}
-    ${agendaPdfHtml()}
-    <div class="pdf-foot"><span>CodeSants · Olhar Humano</span><span>Documento confidencial · gerado pelo Diagnóstico Inicial</span></div>
-  `;
-  document.body.appendChild(doc);
-  return doc;
-}
-function pdfFilename(){
-  const r = respondent();
-  const slug = (r.empresa || r.nome || "codesants")
-    .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
-    .replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"") || "codesants";
-  return `diagnostico-estrategico-${slug}.pdf`;
-}
-async function generatePdf(){
-  const btn = document.getElementById("doPdf");
-  const doc = buildPdfDoc();
-
-  // Sem a biblioteca (offline): cai para o diálogo de impressão.
-  if(!window.html2pdf){ printFallback(); return; }
-
-  if(btn) btn.disabled = true;
-  // Renderiza o documento na tela (0,0) para o html2canvas capturar corretamente,
-  // mas escondido atrás de um overlay de carregamento (o usuário não vê o "papel").
-  const overlay = el("div","pdf-loading");
-  overlay.innerHTML = `<div class="spin"></div><div class="lbl">Gerando seu PDF…</div>`;
-  document.body.appendChild(overlay);
-  doc.classList.add("pdf-capture");
-  window.scrollTo(0, 0);
-  try{
-    // aguarda fontes e imagem (logo) carregarem antes de rasterizar
-    if(document.fonts && document.fonts.ready) await document.fonts.ready;
-    const img = doc.querySelector("img");
-    if(img && !img.complete) await new Promise(r => { img.onload = img.onerror = r; });
-
-    await window.html2pdf().set({
-      margin: [10, 10, 12, 10],
-      filename: pdfFilename(),
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, backgroundColor: "#ffffff", useCORS: true, logging: false },
-      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      pagebreak: { mode: ["css", "legacy"], avoid: [".pdf-qa", ".pdf-part"] },
-    }).from(doc).save();
-
-    toast("PDF baixado ✓");
-    doc.remove();
-    overlay.remove();
-    if(btn) btn.disabled = false;
-  }catch(e){
-    overlay.remove();
-    if(btn) btn.disabled = false;
-    printFallback();   // mantém o .pdf-doc no DOM para a impressão
-  }
-}
-function printFallback(){
-  toast("Abrindo a impressão. Escolha “Salvar como PDF”.");
-  const cleanup = ()=>{ document.querySelectorAll(".pdf-doc").forEach(n=>n.remove()); window.removeEventListener("afterprint", cleanup); };
-  window.addEventListener("afterprint", cleanup);
-  setTimeout(()=>window.print(), 200);
-}
 /* ---- Navegação ---- */
 function setupNav(){
   if(idx<0 || idx>=DONE){ navBar.hidden=true; return; }
@@ -1334,8 +1172,8 @@ function go(n){
 /* ---- Envio para o CRM ----------------------------------------------------
    Monta o payload no formato que POST /api/diagnosticos espera: um mapa
    questionId → resposta, com o texto de "Outro" já embutido na resposta.
-   Falha em silêncio de propósito: o diagnóstico do usuário não pode depender
-   do CRM estar no ar. O PDF continua sendo o comprovante dele.
+   Falha em silêncio de propósito: concluir o diagnóstico não pode depender
+   do CRM estar no ar.
    -------------------------------------------------------------------------- */
 function crmPayload(){
   const out = {};

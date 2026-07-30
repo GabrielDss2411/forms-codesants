@@ -22,10 +22,9 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 - **Nada é salvo entre sessões** (fase de testes).
 - **Transição de parte**: cada parte abre com uma tela de capítulo. As que têm texto em `PART_INTROS` (hoje a Parte 4) **não somem sozinhas** — existem para serem lidas e esperam a pessoa avançar.
 - **Tela de revisão**: clique em qualquer resposta para editar antes de enviar.
-- **Duas telas de fecho**: o *encerramento* explica o que acontece a seguir (texto do `forms.md`) e coleta a disponibilidade; enviada a agenda, a *confirmação* avisa que o envio terminou e recapitula o que foi registrado. Falha no envio mantém a pessoa no encerramento, com o e-mail de contato — nunca confirma o que não foi gravado.
-- **PDF direto**: ao concluir, o botão *Baixar PDF do diagnóstico* gera e baixa o documento na hora (perguntas + respostas, identificação na capa), sem diálogo de impressão. Usa `html2pdf` (via CDN, requer internet); offline, cai automaticamente para o "Salvar como PDF" da impressão. O nome do arquivo usa a empresa/nome do lead.
+- **Duas telas de fecho**: o *encerramento* explica o que acontece a seguir (texto do `forms.md`) e coleta a disponibilidade; enviada a agenda, a *confirmação* avisa que o envio terminou e recapitula o que foi registrado. Falha no envio mantém a pessoa no encerramento, com o e-mail de contato — nunca confirma o que não foi gravado. O lead não baixa cópia das respostas: o registro fica no CRM.
 - **Acessível**: labels, foco gerenciado, `prefers-reduced-motion`, responsivo mobile→desktop.
-- **Disponibilidade para a call**: a tela de encerramento coleta dias, períodos e uma observação, e anexa ao diagnóstico já gravado (`PATCH`). Vai também no PDF, para não se perder se o CRM estiver fora.
+- **Disponibilidade para a call**: a tela de encerramento coleta dias, períodos e uma observação, e anexa ao diagnóstico já gravado (`PATCH`).
 - **Envio ao CRM**: ao concluir, faz `POST` para `CRM_ENDPOINT` (constante no topo do `<script>`) e guarda o `id` devolvido — é ele que permite o `PATCH` da disponibilidade. Vazio = não envia. O `POST` falha em silêncio de propósito (o formulário não pode depender do CRM estar no ar); já o `PATCH` avisa a pessoa e oferece o e-mail de contato, porque ela está esperando um retorno.
 
 ### Lista de prioridade (`rank`)
