@@ -132,6 +132,36 @@ input.inp-line{width:100%;background:var(--surface-2);border:1px solid var(--lin
 input.inp-line:focus{border-color:var(--brand);background:#0b140e;box-shadow:0 0 0 4px rgba(61,220,132,.12)}
 input.inp-line::placeholder{color:var(--faint)}
 
+/* ---------- Lista ordenada por prioridade (type: "rank") ---------- */
+.rank-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.rank-item{display:flex;align-items:center;gap:12px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:8px 12px 8px 8px;
+  transition:border-color .18s,background .18s,box-shadow .18s}
+.rank-item:focus-within{border-color:var(--brand);box-shadow:0 0 0 4px rgba(61,220,132,.1)}
+.rank-item.is-dragging{border-color:var(--brand);background:#0b140e;
+  box-shadow:0 18px 40px rgba(0,0,0,.5);opacity:.96}
+/* Enquanto arrasta, os vizinhos deslizam em vez de pular de posição. */
+.rank-list.is-sorting .rank-item:not(.is-dragging){transition:transform .18s var(--ease-out-expo)}
+.rank-handle{display:grid;place-items:center;width:32px;height:36px;flex:0 0 auto;
+  background:transparent;border:0;border-radius:9px;color:var(--faint);cursor:grab;touch-action:none}
+.rank-handle:hover{color:var(--brand);background:rgba(61,220,132,.08)}
+.rank-handle:active{cursor:grabbing}
+.rank-handle svg{fill:currentColor}
+.rank-num{font-family:var(--font-mono);font-size:12.5px;color:var(--brand-soft);
+  min-width:26px;flex:0 0 auto}
+.rank-input{flex:1;min-width:0;background:transparent;border:0;color:var(--ink);
+  font-family:var(--font-sans);font-size:16px;padding:10px 0;outline:none}
+.rank-input::placeholder{color:var(--faint)}
+.rank-del{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:0;background:transparent;
+  color:var(--faint);font-size:20px;line-height:1;cursor:pointer;transition:color .18s,background .18s}
+.rank-del:hover:not(:disabled){color:var(--danger);background:rgba(255,128,128,.1)}
+.rank-del:disabled{opacity:.25;cursor:default}
+.rank-add{margin-top:12px;background:transparent;border:1px dashed var(--line);border-radius:12px;
+  color:var(--muted);font-family:var(--font-sans);font-size:14.5px;padding:11px 18px;cursor:pointer;
+  transition:border-color .18s,color .18s}
+.rank-add:hover{border-color:rgba(61,220,132,.45);color:var(--brand-soft)}
+.rank-dica{margin:14px 0 0;font-size:13px;color:var(--faint);line-height:1.45}
+
 /* choices */
 .choices{display:flex;flex-direction:column;gap:11px}
 /* Complemento em texto abaixo das opções (perguntas com `detail`). */
@@ -450,10 +480,10 @@ const QUESTIONS = [
     q:["O que faz vocês ","levantarem da cama todos os dias?"],
     hint:"Além de vender um serviço, qual transformação vocês acreditam entregar aos clientes?",
     ph:"A transformação que vocês entregam…" },
-  { id:"q3", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
+  { id:"q3", part:"Parte 1 · Quero conhecer sua empresa", type:"rank",
     q:["Qual é o serviço ou produto mais ","importante para o negócio hoje?"],
-    hint:"Se houver mais de um, coloque em ordem de prioridade.",
-    ph:"1º… 2º… 3º…" },
+    hint:"Se houver mais de um, coloque em ordem de prioridade — do mais importante para o menos.",
+    ph:"Nome do serviço ou produto" },
   { id:"q4", part:"Parte 1 · Quero conhecer sua empresa", type:"long",
     q:["Se eu indicasse sua empresa a um amigo, ","como você gostaria que eu a descrevesse?"],
     hint:"Essa resposta normalmente revela muito sobre o posicionamento da marca.",
@@ -633,6 +663,146 @@ function buildIntro(){
   return s;
 }
 
+/* ---- Campo de lista ordenada por prioridade (type: "rank") ----
+   Um input por item, com botão para acrescentar e reordenação por arrasto.
+   Usa Pointer Events, e não a API de drag do HTML5, porque aquela não
+   funciona em toque — metade dos leads responde pelo celular.
+   As setas no punho fazem o mesmo que o arrasto, para quem usa teclado. */
+function buildRank(qd, field){
+  const wrap = el("div","rank");
+  const lista = el("ol","rank-list");
+  lista.setAttribute("aria-label", stripTags(qTitle(qd.q)));
+
+  /* Lê a ordem direto do DOM: depois de arrastar, ele é a verdade. */
+  const sincroniza = ()=>{
+    const valores = [...lista.querySelectorAll(".rank-item input")].map(i=>i.value);
+    answers[qd.id] = valores;
+    [...lista.querySelectorAll(".rank-item")].forEach((li,i)=>{
+      li.querySelector(".rank-num").textContent = (i+1)+"º";
+      const total = lista.children.length;
+      li.querySelector(".rank-handle").setAttribute("aria-label",
+        `Prioridade ${i+1} de ${total}. Use as setas para cima e para baixo para mudar a ordem.`);
+      li.querySelector(".rank-del").disabled = total <= 1;
+    });
+    save(); syncNav(qd);
+  };
+
+  const move = (li, delta)=>{
+    const irmaos = [...lista.children];
+    const i = irmaos.indexOf(li);
+    const j = i + delta;
+    if(j < 0 || j >= irmaos.length) return;
+    if(delta > 0) lista.insertBefore(irmaos[j], li);
+    else lista.insertBefore(li, irmaos[j]);
+    sincroniza();
+    li.querySelector(".rank-handle").focus();
+  };
+
+  const criaItem = (valor)=>{
+    const li = el("li","rank-item");
+
+    const punho = el("button","rank-handle");
+    punho.type = "button";
+    punho.innerHTML = `<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14">
+      <circle cx="6" cy="4" r="1.3"/><circle cx="10" cy="4" r="1.3"/>
+      <circle cx="6" cy="8" r="1.3"/><circle cx="10" cy="8" r="1.3"/>
+      <circle cx="6" cy="12" r="1.3"/><circle cx="10" cy="12" r="1.3"/></svg>`;
+    punho.addEventListener("keydown", (e)=>{
+      if(e.key === "ArrowUp"){ e.preventDefault(); move(li, -1); }
+      if(e.key === "ArrowDown"){ e.preventDefault(); move(li, +1); }
+    });
+
+    const num = el("span","rank-num","1º");
+
+    const inp = el("input","rank-input");
+    inp.type = "text";
+    inp.value = valor || "";
+    inp.placeholder = qd.ph || "Escreva aqui…";
+    inp.addEventListener("input", sincroniza);
+    inp.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){
+        e.preventDefault();
+        // Enter no último item preenchido acrescenta o próximo, como numa lista.
+        const ultimo = li === lista.lastElementChild;
+        if(ultimo && inp.value.trim()) acrescenta();
+        else avancar();
+      }
+    });
+
+    const del = el("button","rank-del");
+    del.type = "button";
+    del.setAttribute("aria-label","Remover este item");
+    del.innerHTML = "×";
+    del.addEventListener("click", ()=>{
+      if(lista.children.length <= 1) return;
+      li.remove();
+      sincroniza();
+    });
+
+    li.append(punho, num, inp, del);
+    arrastavel(li, punho);
+    return li;
+  };
+
+  const acrescenta = (valor)=>{
+    const li = criaItem(valor);
+    lista.appendChild(li);
+    sincroniza();
+    if(valor === undefined) li.querySelector("input").focus();
+    return li;
+  };
+
+  /* ---- Arrasto ---- */
+  function arrastavel(li, punho){
+    punho.addEventListener("pointerdown", (e)=>{
+      if(e.button !== 0 && e.pointerType === "mouse") return;
+      e.preventDefault();
+      punho.setPointerCapture(e.pointerId);
+      li.classList.add("is-dragging");
+      lista.classList.add("is-sorting");
+
+      const mover = (ev)=>{
+        // Troca com o vizinho quando o ponteiro cruza o meio dele.
+        const irmaos = [...lista.children].filter(x=>x !== li);
+        for(const outro of irmaos){
+          const r = outro.getBoundingClientRect();
+          const meio = r.top + r.height/2;
+          const depois = li.compareDocumentPosition(outro) & Node.DOCUMENT_POSITION_FOLLOWING;
+          if(depois && ev.clientY > meio){ lista.insertBefore(outro, li); break; }
+          if(!depois && ev.clientY < meio){ lista.insertBefore(li, outro); break; }
+        }
+      };
+      const soltar = ()=>{
+        punho.removeEventListener("pointermove", mover);
+        punho.removeEventListener("pointerup", soltar);
+        punho.removeEventListener("pointercancel", soltar);
+        li.classList.remove("is-dragging");
+        lista.classList.remove("is-sorting");
+        sincroniza();
+      };
+      punho.addEventListener("pointermove", mover);
+      punho.addEventListener("pointerup", soltar);
+      punho.addEventListener("pointercancel", soltar);
+    });
+  }
+
+  /* ---- Montagem ---- */
+  const salvos = Array.isArray(answers[qd.id]) ? answers[qd.id] : [];
+  if(salvos.length) salvos.forEach(v => lista.appendChild(criaItem(v)));
+  else { lista.appendChild(criaItem("")); lista.appendChild(criaItem("")); }
+
+  const add = el("button","rank-add");
+  add.type = "button";
+  add.innerHTML = "+ Adicionar item";
+  add.addEventListener("click", ()=>acrescenta());
+
+  const dica = el("p","rank-dica","Arraste pelo punho à esquerda para mudar a ordem — o 1º é o mais importante.");
+
+  wrap.append(lista, add, dica);
+  field.appendChild(wrap);
+  sincroniza();
+}
+
 /* ---- Pergunta ---- */
 function buildQuestion(qd){
   const s = el("section","step-q");
@@ -647,7 +817,9 @@ function buildQuestion(qd){
   }
 
   const field = el("div","field");
-  if(qd.type === "long"){
+  if(qd.type === "rank"){
+    buildRank(qd, field);
+  } else if(qd.type === "long"){
     const ta = el("textarea","inp");
     ta.placeholder = qd.ph || "Escreva aqui…";
     ta.value = answers[qd.id] || "";
@@ -774,6 +946,11 @@ function respondent(){
 }
 function answerText(qd){
   const v = answers[qd.id];
+  // Numa lista de prioridade a ordem é a informação; numerar é obrigatório.
+  if(qd.type === "rank"){
+    const itens = (Array.isArray(v) ? v : []).map(x=>String(x).trim()).filter(Boolean);
+    return itens.map((t,i)=>`${i+1}º ${t}`).join(" · ");
+  }
   let base = Array.isArray(v) ? v.filter(x=>x!=="__other").join(", ") : (v||"").trim();
   const other = (answers[qd.id+"__other"]||"").trim();
   if(other) base = base ? base+" · Outro: "+other : "Outro: "+other;
@@ -1069,6 +1246,11 @@ function outroPreenchido(qd){
 }
 
 function isComplete(qd){
+  if(qd.type === "rank"){
+    const itens = Array.isArray(answers[qd.id]) ? answers[qd.id] : [];
+    return itens.some(x => String(x).trim().length > 0);
+  }
+
   if(qd.type === "single"){
     const v = answers[qd.id];
     if(!v) return false;
@@ -1101,6 +1283,7 @@ function primeiraIncompleta(){
 function pendencia(qd){
   if(qd.type === "email" && (answers[qd.id]||"").trim()) return "Confira o e-mail: falta algo nele.";
   if(qd.type === "tel"   && (answers[qd.id]||"").trim()) return "Confira o telefone: informe o DDD.";
+  if(qd.type === "rank")   return "Informe ao menos um serviço ou produto.";
   if(qd.type === "single") return "Escolha uma opção para continuar.";
   if(qd.type === "multi")  return "Selecione ao menos uma opção para continuar.";
   return "Esta resposta é necessária para continuar.";
@@ -1164,6 +1347,12 @@ function crmPayload(){
     // parágrafo viraria "categoria" nos gráficos do CRM.
     const detalhe = (answers[qd.id+"__detalhe"]||"").trim();
     if(detalhe) out[qd.id+"__detalhe"] = detalhe;
+
+    if(qd.type === "rank"){
+      const itens = (Array.isArray(bruto) ? bruto : []).map(x=>String(x).trim()).filter(Boolean);
+      if(itens.length) out[qd.id] = itens;
+      return;
+    }
 
     if(Array.isArray(bruto)){
       // "__other" é só um marcador interno; o que vale é o texto digitado.

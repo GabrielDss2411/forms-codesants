@@ -16,7 +16,7 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 
 - **Multi-step imersivo**: uma pergunta por tela, barra de progresso, transições com easing expo e telas de capítulo entre as partes.
 - **Identificação no início**: nome, telefone/WhatsApp, empresa e e-mail de quem responde.
-- **Tipos de campo**: texto curto, texto longo, telefone, e-mail, escolha única e múltipla escolha com “Outro”. Marcar uma opção **não** avança sozinho: quem passa de tela é a pessoa, com `Enter` ou *Continuar*. Uma pergunta de múltipla escolha pode ter `detail`: um campo de texto abaixo das opções, guardado em `<id>__detalhe` (usado na 21, onde marcar a área não responde — o relato responde).
+- **Tipos de campo**: texto curto, texto longo, telefone, e-mail, escolha única, múltipla escolha com “Outro” e **lista de prioridade** (`rank`). Marcar uma opção **não** avança sozinho: quem passa de tela é a pessoa, com `Enter` ou *Continuar*. Uma pergunta de múltipla escolha pode ter `detail`: um campo de texto abaixo das opções, guardado em `<id>__detalhe` (usado na 21, onde marcar a área não responde — o relato responde).
 - **Teclado**: `Enter` avança · `Shift+Enter` nova linha · teclas `1–9` selecionam opções.
 - **Todas as perguntas obrigatórias**: não se avança sem responder, e o botão diz o que falta. Voltar é sempre livre; quem edita pela revisão é devolvido para lá. E-mail precisa ter formato válido; telefone, ao menos 10 dígitos — contato inválido é um lead que não dá para alcançar.
 - **Nada é salvo entre sessões** (fase de testes).
@@ -28,11 +28,22 @@ Experiência de formulário e design system, na identidade visual do site CodeSa
 - **Disponibilidade para a call**: a tela de encerramento coleta dias, períodos e uma observação, e anexa ao diagnóstico já gravado (`PATCH`). Vai também no PDF, para não se perder se o CRM estiver fora.
 - **Envio ao CRM**: ao concluir, faz `POST` para `CRM_ENDPOINT` (constante no topo do `<script>`) e guarda o `id` devolvido — é ele que permite o `PATCH` da disponibilidade. Vazio = não envia. O `POST` falha em silêncio de propósito (o formulário não pode depender do CRM estar no ar); já o `PATCH` avisa a pessoa e oferece o e-mail de contato, porque ela está esperando um retorno.
 
+### Lista de prioridade (`rank`)
+
+Usada na pergunta 3. Um input por item, botão para acrescentar, remoção
+individual e reordenação **arrastando pelo punho** à esquerda. A resposta é um
+array de strings onde a **posição é a informação** (`1º` = mais importante) —
+diferente de `multi`, em que a ordem não significa nada.
+
+Arrastar usa Pointer Events, não a API de drag do HTML5, porque aquela não
+funciona em toque. As setas ↑/↓ com o punho em foco fazem o mesmo que o
+arrasto, para quem usa teclado ou leitor de tela.
+
 ### Editar as perguntas
 
 Todas as perguntas vivem no array `QUESTIONS` dentro do `<script>` de
 `index.html`. Cada item tem `id`, `part`, `type`
-(`long` | `text` | `tel` | `email` | `single` | `multi`), o texto (`q`, com trechos em `[...]` virando destaque verde),
+(`long` | `text` | `tel` | `email` | `single` | `multi` | `rank`), o texto (`q`, com trechos em `[...]` virando destaque verde),
 `hint`, `options`, `other` e `detail`.
 
 > Ao mexer nas perguntas, espelhe o mesmo `id` em `lib/questions.ts` do
