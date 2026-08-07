@@ -4,282 +4,336 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Design System · CodeSants</title>
-<meta name="description" content="Design system da CodeSants: tokens, tipografia, cores, componentes e princípios de movimento." />
+<meta name="description" content="Design system da CodeSants: cor, tipografia, componentes, forma e movimento." />
 <meta name="color-scheme" content="dark" />
 <link rel="icon" href="./logo.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 <style>
+/* ============================================================
+   Tokens · derivados do wordmark CodeSants
+   Espelham web/app/globals.css (@theme). Mudou lá, mude aqui.
+   ============================================================ */
 :root{
-  --bg:#07100b; --surface:#0c150f; --surface-2:#0a120d; --panel:#0e1812;
-  --ink:#eaf2ec; --ink-bright:#f3f8f4; --ink-invert:#04140c;
-  --muted:#a7bbae; --muted-2:#8ba194; --subtle:#9db0a4; --faint:#5c7065;
-  --brand:#3ddc84; --brand-2:#2bd4c0; --brand-soft:#7fe3ab;
-  --line:rgba(255,255,255,.09); --line-soft:rgba(255,255,255,.05);
+  /* Superfícies, do mais profundo ao mais alto */
+  --abyss:#03151b; --bg:#061c24; --surface:#0a2730; --surface-2:#08222a; --panel:#0e323d;
+
+  /* Tinta */
+  --ink:#e8f2ef; --ink-bright:#ffffff; --muted:#a8c0bc; --muted-2:#8aa5a2;
+  --subtle:#9cb5b1; --faint:#6e8a88; --ink-invert:#03151b;
+
+  /* Marca */
+  --brand-deep:#0f5c45; --brand-600:#17845f; --brand:#2fc48d;
+  --brand-soft:#5fdcae; --brand-2:#57d3d6; --teal-deep:#145c66;
+
+  /* Estados */
+  --good:#2fc48d; --warning:#e0a93f; --danger:#f08079;
+
+  /* Séries de gráfico — ordem fixa, nunca ciclada */
+  --cat-1:#33ab6f; --cat-2:#c08420; --cat-3:#4a86dd; --cat-4:#cf5b52; --cat-5:#9a6cd8;
+
+  --line:rgba(255,255,255,.08); --line-soft:rgba(255,255,255,.05);
   --font-sans:"Hanken Grotesk",system-ui,sans-serif;
   --font-display:"Space Grotesk",system-ui,sans-serif;
   --font-mono:"Space Mono",ui-monospace,monospace;
   --radius:12px; --radius-lg:16px; --radius-xl:20px; --radius-2xl:22px;
   --ease-out-expo:cubic-bezier(.16,1,.3,1);
 }
+
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-sans);
-  -webkit-font-smoothing:antialiased;line-height:1.5;
-  background-image:radial-gradient(circle at 50% -8%,rgba(61,220,132,.12),transparent 52%),
-    radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);background-size:auto,32px 32px}
-::selection{background:rgba(61,220,132,.28);color:#fff}
-*{scrollbar-width:thin;scrollbar-color:rgba(61,220,132,.45) transparent}
-::-webkit-scrollbar{width:11px}::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--brand),var(--brand-2));border-radius:999px;border:3px solid var(--bg);background-clip:padding-box}
-a{color:var(--brand-soft)}
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+::selection{background:rgba(47,196,141,.3);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:rgba(47,196,141,.45) transparent}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--brand),var(--brand-2));
+  border-radius:999px;border:3px solid var(--bg);background-clip:padding-box}
+code{font-family:var(--font-mono);font-size:.9em}
 
-.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(20px,5vw,48px)}
-header.hero{padding:clamp(70px,12vw,130px) 0 60px;border-bottom:1px solid var(--line-soft)}
-.hero__logo{height:34px;width:auto;display:block;margin-bottom:30px}
-.kick{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12px;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--brand)}
-.kick .dot{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand)}
-h1{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;line-height:1.02;
-  font-size:clamp(40px,8vw,78px);margin:22px 0 0}
-.hl{background:linear-gradient(110deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--muted);font-size:clamp(16px,2.2vw,19px);max-width:60ch;margin:22px 0 0;line-height:1.66}
+/* Assinatura: o gradiente do wordmark */
+.brand-gradient{background-image:linear-gradient(118deg,var(--brand-deep) 0%,#0b3f3d 38%,var(--bg) 72%,var(--abyss) 100%)}
+.grain{position:relative}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E")}
 
-section{padding:64px 0;border-bottom:1px solid var(--line-soft)}
-.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:34px;flex-wrap:wrap}
-.sec-head h2{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,4vw,34px);
-  letter-spacing:-.02em;margin:0;color:var(--ink-bright)}
-.sec-head .n{font-family:var(--font-mono);font-size:13px;color:var(--faint)}
-.sec-head p{color:var(--muted);margin:0;flex:1;min-width:240px;font-size:15px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(20px,5vw,44px)}
 
-.grid{display:grid;gap:16px}
-.g2{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-.g3{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
-.g4{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+/* Capa */
+.hero{padding:clamp(80px,12vw,140px) 0 clamp(60px,8vw,96px);border-bottom:1px solid var(--line);
+  overflow:hidden;border-radius:0 0 28px 28px}
+.hero h1{font-family:var(--font-display);font-weight:700;letter-spacing:-.03em;line-height:1.02;
+  font-size:clamp(40px,7vw,76px);margin:18px 0 0;color:var(--ink-bright)}
+.hero p{color:var(--muted);font-size:clamp(16px,2.2vw,19px);max-width:56ch;margin:20px 0 0}
+.kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--brand)}
 
-/* swatches */
-.sw{border:1px solid var(--line-soft);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface)}
-.sw__chip{height:96px;position:relative}
-.sw__body{padding:12px 14px}
-.sw__name{font-family:var(--font-display);font-weight:600;font-size:14px}
-.sw__meta{font-family:var(--font-mono);font-size:11.5px;color:var(--faint);margin-top:3px;
-  display:flex;justify-content:space-between;gap:8px}
-.sw__var{color:var(--brand-soft)}
+section{padding:clamp(56px,8vw,88px) 0;border-bottom:1px solid var(--line-soft)}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:10px}
+.sec-head .n{font-family:var(--font-mono);font-size:12px;color:var(--faint);letter-spacing:.14em}
+.sec-head h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+  font-size:clamp(26px,3.6vw,38px);margin:0;color:var(--ink-bright)}
+.sec-sub{color:var(--muted);max-width:64ch;margin:0 0 34px;font-size:16px}
+h3{font-family:var(--font-display);font-size:15px;font-weight:600;color:var(--ink-bright);
+  margin:36px 0 14px;letter-spacing:-.01em}
 
-/* type specimen */
-.type-row{border:1px solid var(--line-soft);border-radius:var(--radius-lg);padding:22px 24px;background:var(--surface);margin-bottom:14px}
-.type-row .lbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;display:flex;gap:14px;flex-wrap:wrap}
-.type-row .lbl b{color:var(--brand-soft);font-weight:400}
-.sp-display{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;line-height:1.02;font-size:clamp(32px,5vw,52px);color:var(--ink-bright)}
-.sp-h2{font-family:var(--font-display);font-weight:600;letter-spacing:-.02em;font-size:30px;color:var(--ink-bright)}
-.sp-body{font-family:var(--font-sans);font-size:18px;color:var(--muted);line-height:1.6;max-width:60ch}
-.sp-mono{font-family:var(--font-mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--brand)}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.g5{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 
-/* components */
-.card{border:1px solid var(--line-soft);border-radius:var(--radius-xl);padding:26px;background:linear-gradient(180deg,var(--panel),#0a130d)}
-.demo{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
-.btn{font-family:var(--font-display);font-weight:600;cursor:pointer;border:0;border-radius:12px;transition:transform .18s var(--ease-out-expo),filter .2s,background .2s}
-.btn--primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:var(--ink-invert);padding:15px 28px;font-size:16px;box-shadow:0 10px 30px rgba(61,220,132,.3)}
-.btn--primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
-.btn--solid{background:var(--brand);color:var(--ink-invert);padding:10px 18px;font-size:14px;box-shadow:0 6px 18px rgba(61,220,132,.25)}
-.btn--solid:hover{background:#5be79c}
-.btn--ghost{background:rgba(255,255,255,.05);border:1px solid var(--line);color:#dceee4;padding:13px 22px;font-size:15px}
-.btn--ghost:hover{background:rgba(255,255,255,.1)}
-.btn--link{background:none;color:var(--subtle);font-size:14.5px;padding:6px}
-.btn--link:hover{color:var(--brand)}
+/* Amostras de cor */
+.sw{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface)}
+.sw__c{height:88px;display:block}
+.sw__m{padding:11px 13px;display:flex;flex-direction:column;gap:3px}
+.sw__n{font-size:13.5px;color:var(--ink)}
+.sw__v{font-family:var(--font-mono);font-size:11.5px;color:var(--faint)}
+.sw__r{font-family:var(--font-mono);font-size:11px;color:var(--brand-soft)}
 
-.inp{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;color:var(--ink);
-  font-family:var(--font-sans);font-size:16px;padding:15px 17px;outline:none;transition:border-color .2s,box-shadow .2s}
-.inp:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(61,220,132,.12)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:22px}
+.nota{border-left:2px solid var(--brand);background:rgba(47,196,141,.06);padding:16px 20px;
+  border-radius:0 var(--radius) var(--radius) 0;color:var(--muted);font-size:15px;margin:26px 0}
+.nota b{color:var(--ink-bright)}
+.alerta{border-left-color:var(--warning);background:rgba(224,169,63,.07)}
+
+/* Componentes de amostra */
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;cursor:pointer;
+  font-family:var(--font-display);font-weight:600;font-size:15px;padding:13px 24px;
+  transition:transform .18s var(--ease-out-expo),filter .18s}
+.btn:hover{transform:translateY(-2px)}
+.btn--pri{background:linear-gradient(120deg,var(--brand),var(--brand-2));color:var(--ink-invert)}
+.btn--sec{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn--sec:hover{border-color:var(--brand);color:var(--brand-soft)}
+.inp{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius-lg);
+  color:var(--ink);font-family:var(--font-sans);font-size:16px;padding:14px 16px;outline:none;
+  transition:border-color .2s,box-shadow .2s}
+.inp:focus{border-color:var(--brand);box-shadow:0 0 0 4px rgba(47,196,141,.12)}
 .inp::placeholder{color:var(--faint)}
-label.fld{display:block;font-size:13px;color:var(--muted-2);margin:0 0 8px;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase}
+.badge{display:inline-flex;align-items:center;gap:7px;border-radius:999px;padding:5px 12px;
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid}
+.badge i{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
+.b-good{color:var(--good);border-color:rgba(47,196,141,.4);background:rgba(47,196,141,.1)}
+.b-warn{color:var(--warning);border-color:rgba(224,169,63,.4);background:rgba(224,169,63,.1)}
+.b-dang{color:var(--danger);border-color:rgba(240,128,121,.4);background:rgba(240,128,121,.1)}
 
-.choice{display:flex;align-items:center;gap:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:15px 17px;cursor:pointer;transition:transform .18s var(--ease-out-expo),border-color .18s,background .18s;font-size:15.5px;color:var(--ink);width:100%}
-.choice:hover{transform:translateX(3px);border-color:var(--brand);background:rgba(61,220,132,.06)}
-.choice.on{border-color:var(--brand);background:rgba(61,220,132,.1);box-shadow:inset 0 0 0 1px rgba(61,220,132,.35)}
-.mk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--faint);display:grid;place-items:center}
-.choice.on .mk{border-color:var(--brand);background:var(--brand);color:var(--ink-invert);font-weight:700;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line-soft)}
+th{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:400}
+td code{color:var(--brand-soft)}
+.ok{color:var(--good)} .no{color:var(--danger)}
 
-.eyebrow{display:inline-flex;align-items:center;gap:10px}
-.eyebrow .d{width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 10px var(--brand)}
-.eyebrow span{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--brand)}
-
-.radii{display:flex;gap:18px;flex-wrap:wrap}
-.radii figure{margin:0;text-align:center}
-.radii .box{width:96px;height:72px;background:linear-gradient(135deg,rgba(61,220,132,.16),rgba(43,212,192,.08));border:1px solid rgba(61,220,132,.28)}
-.radii figcaption{font-family:var(--font-mono);font-size:11px;color:var(--faint);margin-top:9px}
-
-.ease-demo{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:12px}
-.ease-demo i{display:block;height:100%;width:40%;background:linear-gradient(90deg,var(--brand),var(--brand-2));border-radius:999px;animation:slide 2.6s var(--ease-out-expo) infinite alternate}
-@keyframes slide{to{width:100%}}
-
-.principles{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-.principles .card h3{font-family:var(--font-display);font-size:18px;margin:0 0 8px;color:var(--ink-bright)}
-.principles .card .gl{font-size:22px;color:var(--brand);margin-bottom:12px}
-.principles .card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.55}
-
-code{font-family:var(--font-mono);background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:6px;padding:2px 7px;font-size:12.5px;color:var(--brand-soft)}
-footer{padding:50px 0 90px;color:var(--faint);font-size:13.5px}
-footer a{color:var(--brand-soft);text-decoration:none}
-.tokref{width:100%;border-collapse:collapse;font-size:13.5px}
-.tokref td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
-.tokref td:first-child{font-family:var(--font-mono);color:var(--brand-soft);white-space:nowrap}
-.tokref td:last-child{color:var(--muted)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+footer{padding:44px 0 70px;color:var(--faint);font-size:13.5px}
+@media (prefers-reduced-motion: reduce){*{transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-<header class="hero">
-  <img class="hero__logo" src="./logo.svg" alt="CodeSants" />
-  <span class="kick"><span class="dot"></span>Design System</span>
-  <h1>O sistema por trás do<br><span class="hl">Olhar Humano.</span></h1>
-  <p>A linguagem visual da CodeSants: tokens, tipografia, cor, componentes e movimento. Um dark theme verde-esmeralda, tipografia técnica e acentos luminosos, a base compartilhada entre o site (Next.js) e o formulário de diagnóstico.</p>
+<header class="hero brand-gradient grain">
+  <div class="wrap">
+    <span class="kicker">CodeSants · Design System</span>
+    <h1>A marca em<br>forma de sistema</h1>
+    <p>Cor, tipografia e componentes derivados do wordmark. Este documento é a fonte
+       da verdade: os tokens abaixo espelham <code>web/app/globals.css</code>.</p>
+  </div>
 </header>
 
-<!-- FUNDAMENTOS -->
+<main class="wrap">
+
+<!-- 01 · Fundamento -->
 <section>
-  <div class="sec-head"><span class="n">01</span><h2>Fundamentos</h2>
-    <p>Dark-first. O verde é acento, nunca fundo. Texto claro sobre superfícies quase-pretas com leve tonalidade verde.</p></div>
-  <div class="principles">
-    <div class="card"><div class="gl">◐</div><h3>Dark-first</h3><p>O canvas é um verde-quase-preto (<code>#07100b</code>). Camadas de superfície criam profundidade sutil, sem cinzas neutros.</p></div>
-    <div class="card"><div class="gl">✦</div><h3>Verde é acento</h3><p>Brand e teal aparecem em CTAs, glows e destaques, sempre com propósito. Excesso de verde tira o impacto.</p></div>
-    <div class="card"><div class="gl">◈</div><h3>Contraste técnico</h3><p>Display geométrico + mono para labels. A mistura passa precisão de engenharia com calor humano.</p></div>
-    <div class="card"><div class="gl">◷</div><h3>Movimento com intenção</h3><p>Transições expo, glows lentos, revelações suaves. Nada pisca; tudo respira.</p></div>
+  <div class="sec-head"><span class="n">01</span><h2>O gradiente</h2></div>
+  <p class="sec-sub">A assinatura da marca é uma diagonal do verde-esmeralda profundo ao petróleo
+     quase preto, com um grão fino por cima. É o que carrega a identidade — hero, faixas e cartões
+     de destaque.</p>
+
+  <div class="brand-gradient grain" style="height:200px;border-radius:var(--radius-2xl);border:1px solid var(--line);display:grid;place-items:center">
+    <span style="font-family:var(--font-display);font-weight:700;font-size:clamp(28px,5vw,52px);letter-spacing:-.03em;color:#fff">CODESANTS</span>
+  </div>
+
+  <div class="nota">
+    <b>A regra que sustenta o resto:</b> o verde do gradiente (<code>--brand-deep</code>, #0f5c45)
+    tem apenas <b>2,2:1</b> contra o fundo. Ele é cor de <b>superfície</b> — preenchimento, borda,
+    fundo. Texto, link e ícone usam os passos claros da rampa. Confundir os dois é como uma paleta
+    escura costuma falhar.
   </div>
 </section>
 
-<!-- COR -->
+<!-- 02 · Cor -->
 <section>
-  <div class="sec-head"><span class="n">02</span><h2>Cor</h2>
-    <p>Marca, superfícies e texto. Tokens espelham <code>web/app/globals.css</code> (<code>@theme</code>).</p></div>
+  <div class="sec-head"><span class="n">02</span><h2>Cor</h2></div>
+  <p class="sec-sub">Toda cor da interface sai daqui. Os números são o contraste WCAG contra
+     <code>--bg</code>, medidos por <code>web/scripts/check-palette.mjs</code>.</p>
 
-  <h3 style="font-family:var(--font-display);color:var(--ink-bright);font-size:16px;margin:0 0 14px">Marca</h3>
-  <div class="grid g3" style="margin-bottom:30px">
-    <div class="sw"><div class="sw__chip" style="background:linear-gradient(135deg,#3ddc84,#2bd4c0)"></div><div class="sw__body"><div class="sw__name">Brand Gradient</div><div class="sw__meta"><span class="sw__var">brand → brand-2</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#3ddc84"></div><div class="sw__body"><div class="sw__name">Brand</div><div class="sw__meta"><span class="sw__var">--color-brand</span><span>#3ddc84</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#2bd4c0"></div><div class="sw__body"><div class="sw__name">Brand 2 (teal)</div><div class="sw__meta"><span class="sw__var">--color-brand-2</span><span>#2bd4c0</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#7fe3ab"></div><div class="sw__body"><div class="sw__name">Brand Soft</div><div class="sw__meta"><span class="sw__var">--color-brand-soft</span><span>#7fe3ab</span></div></div></div>
+  <h3>Superfícies — do mais profundo ao mais alto</h3>
+  <div class="grid g5">
+    <div class="sw"><span class="sw__c" style="background:var(--abyss)"></span><span class="sw__m"><span class="sw__n">abyss</span><span class="sw__v">#03151b</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--bg)"></span><span class="sw__m"><span class="sw__n">bg</span><span class="sw__v">#061c24</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--surface-2)"></span><span class="sw__m"><span class="sw__n">surface-2</span><span class="sw__v">#08222a</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--surface)"></span><span class="sw__m"><span class="sw__n">surface</span><span class="sw__v">#0a2730</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--panel)"></span><span class="sw__m"><span class="sw__n">panel</span><span class="sw__v">#0e323d</span></span></div>
   </div>
 
-  <h3 style="font-family:var(--font-display);color:var(--ink-bright);font-size:16px;margin:0 0 14px">Superfícies</h3>
-  <div class="grid g4" style="margin-bottom:30px">
-    <div class="sw"><div class="sw__chip" style="background:#07100b"></div><div class="sw__body"><div class="sw__name">bg</div><div class="sw__meta"><span>#07100b</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#0c150f"></div><div class="sw__body"><div class="sw__name">surface</div><div class="sw__meta"><span>#0c150f</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#0a120d"></div><div class="sw__body"><div class="sw__name">surface-2</div><div class="sw__meta"><span>#0a120d</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#0e1812"></div><div class="sw__body"><div class="sw__name">panel</div><div class="sw__meta"><span>#0e1812</span></div></div></div>
+  <h3>Marca — do preenchimento ao texto</h3>
+  <div class="grid g5">
+    <div class="sw"><span class="sw__c" style="background:var(--brand-deep)"></span><span class="sw__m"><span class="sw__n">brand-deep</span><span class="sw__v">#0f5c45</span><span class="sw__r">2,2:1 · só superfície</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--brand-600)"></span><span class="sw__m"><span class="sw__n">brand-600</span><span class="sw__v">#17845f</span><span class="sw__r">3,8:1 · borda e UI</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--brand)"></span><span class="sw__m"><span class="sw__n">brand</span><span class="sw__v">#2fc48d</span><span class="sw__r">7,8:1 · texto ✓</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--brand-soft)"></span><span class="sw__m"><span class="sw__n">brand-soft</span><span class="sw__v">#5fdcae</span><span class="sw__r">10,3:1 · texto ✓</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--brand-2)"></span><span class="sw__m"><span class="sw__n">brand-2</span><span class="sw__v">#57d3d6</span><span class="sw__r">9,8:1 · texto ✓</span></span></div>
   </div>
 
-  <h3 style="font-family:var(--font-display);color:var(--ink-bright);font-size:16px;margin:0 0 14px">Texto</h3>
-  <div class="grid g4">
-    <div class="sw"><div class="sw__chip" style="background:#f3f8f4"></div><div class="sw__body"><div class="sw__name" style="color:#04140c">ink-bright</div><div class="sw__meta"><span>#f3f8f4</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#eaf2ec"></div><div class="sw__body"><div class="sw__name" style="color:#04140c">ink</div><div class="sw__meta"><span>#eaf2ec</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#a7bbae"></div><div class="sw__body"><div class="sw__name" style="color:#04140c">muted</div><div class="sw__meta"><span>#a7bbae</span></div></div></div>
-    <div class="sw"><div class="sw__chip" style="background:#5c7065"></div><div class="sw__body"><div class="sw__name">faint</div><div class="sw__meta"><span>#5c7065</span></div></div></div>
+  <h3>Tinta</h3>
+  <div class="grid g5">
+    <div class="sw"><span class="sw__c" style="background:var(--ink-bright)"></span><span class="sw__m"><span class="sw__n">ink-bright</span><span class="sw__v">#ffffff</span><span class="sw__r">17,5:1</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--ink)"></span><span class="sw__m"><span class="sw__n">ink</span><span class="sw__v">#e8f2ef</span><span class="sw__r">15,3:1</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--muted)"></span><span class="sw__m"><span class="sw__n">muted</span><span class="sw__v">#a8c0bc</span><span class="sw__r">9,1:1</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--subtle)"></span><span class="sw__m"><span class="sw__n">subtle</span><span class="sw__v">#9cb5b1</span><span class="sw__r">6,7:1</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--faint)"></span><span class="sw__m"><span class="sw__n">faint</span><span class="sw__v">#6e8a88</span><span class="sw__r">4,7:1 · texto grande</span></span></div>
   </div>
+
+  <h3>Estados</h3>
+  <div class="grid g3">
+    <div class="sw"><span class="sw__c" style="background:var(--good)"></span><span class="sw__m"><span class="sw__n">good</span><span class="sw__v">#2fc48d</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--warning)"></span><span class="sw__m"><span class="sw__n">warning</span><span class="sw__v">#e0a93f</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--danger)"></span><span class="sw__m"><span class="sw__n">danger</span><span class="sw__v">#f08079</span></span></div>
+  </div>
+  <p style="color:var(--muted-2);font-size:14px;margin-top:14px">
+    Estado nunca aparece só como cor: vem sempre com ícone ou rótulo.
+  </p>
+
+  <h3>Séries de gráfico</h3>
+  <div class="grid g5">
+    <div class="sw"><span class="sw__c" style="background:var(--cat-1)"></span><span class="sw__m"><span class="sw__n">cat-1</span><span class="sw__v">#33ab6f</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--cat-2)"></span><span class="sw__m"><span class="sw__n">cat-2</span><span class="sw__v">#c08420</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--cat-3)"></span><span class="sw__m"><span class="sw__n">cat-3</span><span class="sw__v">#4a86dd</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--cat-4)"></span><span class="sw__m"><span class="sw__n">cat-4</span><span class="sw__v">#cf5b52</span></span></div>
+    <div class="sw"><span class="sw__c" style="background:var(--cat-5)"></span><span class="sw__m"><span class="sw__n">cat-5</span><span class="sw__v">#9a6cd8</span></span></div>
+  </div>
+  <p style="color:var(--muted-2);font-size:14px;margin-top:14px">
+    Ordem fixa, atribuída por entidade — nunca por posição no ranking, nunca ciclada.
+    Validada para daltonismo e contraste sobre superfície escura.
+  </p>
 </section>
 
-<!-- TIPOGRAFIA -->
+<!-- 03 · Tipografia -->
 <section>
-  <div class="sec-head"><span class="n">03</span><h2>Tipografia</h2>
-    <p><b>Space Grotesk</b> (display) · <b>Hanken Grotesk</b> (texto) · <b>Space Mono</b> (labels/eyebrows).</p></div>
-  <div class="type-row">
-    <div class="lbl"><span>Display</span><b>Space Grotesk 700</b><span>tracking −.025em · line 1.02</span></div>
-    <div class="sp-display">IA que começa nas <span class="hl">pessoas</span>.</div>
-  </div>
-  <div class="type-row">
-    <div class="lbl"><span>Título de seção</span><b>Space Grotesk 600</b><span>tracking −.02em</span></div>
-    <div class="sp-h2">Um site que carrega rápido e converte</div>
-  </div>
-  <div class="type-row">
-    <div class="lbl"><span>Corpo</span><b>Hanken Grotesk 400</b><span>18px · line 1.6</span></div>
-    <div class="sp-body">Começamos entendendo as pessoas e o processo, depois construímos agentes, automações, sites e análise de dados que duram.</div>
-  </div>
-  <div class="type-row">
-    <div class="lbl"><span>Eyebrow / mono</span><b>Space Mono 400</b><span>tracking .22em · uppercase</span></div>
-    <div class="sp-mono">Serviço · Agente IA</div>
-  </div>
-</section>
+  <div class="sec-head"><span class="n">03</span><h2>Tipografia</h2></div>
+  <p class="sec-sub">Três famílias, cada uma com um trabalho. Nunca uma no lugar da outra.</p>
 
-<!-- COMPONENTES -->
-<section>
-  <div class="sec-head"><span class="n">04</span><h2>Componentes</h2>
-    <p>Botões, campos, escolhas e o eyebrow: os blocos reutilizáveis do site e do formulário.</p></div>
-
-  <div class="grid g2" style="align-items:start">
+  <div class="grid g2">
     <div class="card">
-      <div class="lbl" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:18px">Botões</div>
-      <div class="demo">
-        <button class="btn btn--primary">Começar diagnóstico <span style="font-family:var(--font-mono)">↗</span></button>
-        <button class="btn btn--solid">Solid</button>
-        <button class="btn btn--ghost">Ghost</button>
-        <button class="btn btn--link">Voltar</button>
-      </div>
+      <div style="font-family:var(--font-display);font-size:38px;font-weight:700;letter-spacing:-.03em;color:var(--ink-bright);line-height:1.05">Space Grotesk</div>
+      <p style="color:var(--muted);font-size:14.5px;margin:12px 0 0">Títulos e números. Peso 600–700, entrelinha curta, <code>letter-spacing</code> negativo.</p>
     </div>
-
     <div class="card">
-      <div class="lbl" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:18px">Eyebrow</div>
-      <span class="eyebrow"><span class="d"></span><span>Parte 1 · Quero conhecer sua empresa</span></span>
+      <div style="font-size:26px;color:var(--ink);line-height:1.4">Hanken Grotesk</div>
+      <p style="color:var(--muted);font-size:14.5px;margin:12px 0 0">Corpo de texto. Peso 400–500, entrelinha 1,6.</p>
     </div>
-
     <div class="card">
-      <div class="lbl" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:18px">Campo de texto</div>
-      <label class="fld">Nome completo</label>
-      <input class="inp" placeholder="Digite aqui…" value="CodeSants" />
-      <p style="color:var(--muted-2);font-size:13px;margin:10px 2px 0">Foco: borda brand + ring de 4px em brand/12.</p>
-    </div>
-
-    <div class="card">
-      <div class="lbl" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:18px">Escolhas</div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <button class="choice on"><span class="mk">✓</span> Confiança</button>
-        <button class="choice"><span class="mk"></span> Rapidez</button>
-      </div>
+      <div style="font-family:var(--font-mono);font-size:20px;color:var(--brand);letter-spacing:.1em">SPACE MONO</div>
+      <p style="color:var(--muted);font-size:14.5px;margin:12px 0 0">Rótulos, números e metadados. Maiúsculas com <code>letter-spacing</code> de .14–.22em.</p>
     </div>
   </div>
 </section>
 
-<!-- FORMA & MOVIMENTO -->
+<!-- 04 · Componentes -->
 <section>
-  <div class="sec-head"><span class="n">05</span><h2>Forma &amp; Movimento</h2>
-    <p>Cantos arredondados generosos e easing expo: o toque que faz tudo parecer “premium”.</p></div>
-  <div class="radii" style="margin-bottom:34px">
-    <figure><div class="box" style="border-radius:12px"></div><figcaption>--radius · 12px</figcaption></figure>
-    <figure><div class="box" style="border-radius:16px"></div><figcaption>--radius-lg · 16px</figcaption></figure>
-    <figure><div class="box" style="border-radius:20px"></div><figcaption>--radius-xl · 20px</figcaption></figure>
-    <figure><div class="box" style="border-radius:22px"></div><figcaption>--radius-2xl · 22px</figcaption></figure>
+  <div class="sec-head"><span class="n">04</span><h2>Componentes</h2></div>
+  <p class="sec-sub">O mínimo que se repete em todas as telas.</p>
+
+  <h3>Botões</h3>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <button class="btn btn--pri">Agendar conversa →</button>
+    <button class="btn btn--sec">Conhecer o método</button>
   </div>
-  <div class="card">
-    <div class="lbl" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)">Easing</div>
-    <p style="color:var(--muted);font-size:14.5px;margin:8px 0 0">Saída (entra na tela): <code>cubic-bezier(.16, 1, .3, 1)</code> · Entrada (sai da tela): <code>cubic-bezier(.7, 0, .84, 0)</code></p>
-    <div class="ease-demo"><i></i></div>
+
+  <h3>Campo</h3>
+  <div style="max-width:420px"><input class="inp" placeholder="voce@empresa.com.br" /></div>
+
+  <h3>Selos de estado</h3>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <span class="badge b-good"><i></i>Concluído</span>
+    <span class="badge b-warn"><i></i>Pendente</span>
+    <span class="badge b-dang"><i></i>Falhou</span>
+  </div>
+
+  <h3>Cartão</h3>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <span class="badge b-good" style="margin-bottom:12px"><i></i>Em dia</span>
+      <div style="font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--ink-bright);margin-top:6px">Escuta &amp; Diagnóstico</div>
+      <p style="color:var(--muted);font-size:15px;margin:8px 0 0">Ouvimos quem vive o processo antes de falar em tecnologia.</p>
+    </div>
+    <div class="card brand-gradient grain" style="border-color:rgba(47,196,141,.28)">
+      <div style="font-family:var(--font-display);font-size:19px;font-weight:600;color:#fff;position:relative;z-index:1">Cartão de destaque</div>
+      <p style="color:var(--muted);font-size:15px;margin:8px 0 0;position:relative;z-index:1">Com o gradiente da marca, para o que precisa puxar o olho.</p>
+    </div>
   </div>
 </section>
 
-<!-- TOKENS REF -->
+<!-- 05 · Forma e movimento -->
 <section>
-  <div class="sec-head"><span class="n">06</span><h2>Referência de tokens</h2>
-    <p>Nomes canônicos usados no CSS. Copie direto para novos componentes.</p></div>
-  <div class="card" style="padding:8px 12px">
-    <table class="tokref">
-      <tr><td>--color-bg</td><td>#07100b · canvas / fundo do site</td></tr>
-      <tr><td>--color-surface / -2</td><td>#0c150f / #0a120d · cartões e campos</td></tr>
-      <tr><td>--color-panel</td><td>#0e1812 · modais e painéis elevados</td></tr>
-      <tr><td>--color-brand / -2 / -soft</td><td>#3ddc84 / #2bd4c0 / #7fe3ab · acento, gradiente, hover</td></tr>
-      <tr><td>--color-ink / -bright / -invert</td><td>#eaf2ec / #f3f8f4 / #04140c · texto e texto sobre verde</td></tr>
-      <tr><td>--color-muted / -2 / faint</td><td>#a7bbae / #8ba194 / #5c7065 · texto secundário e sutil</td></tr>
-      <tr><td>--font-display / sans / mono</td><td>Space Grotesk / Hanken Grotesk / Space Mono</td></tr>
-      <tr><td>--radius · lg · xl · 2xl</td><td>12 · 16 · 20 · 22 px</td></tr>
-      <tr><td>--ease-out-expo</td><td>cubic-bezier(.16, 1, .3, 1)</td></tr>
-    </table>
+  <div class="sec-head"><span class="n">05</span><h2>Forma &amp; movimento</h2></div>
+  <p class="sec-sub">Cantos generosos e saída rápida com chegada suave.</p>
+
+  <div class="grid g5">
+    <div class="card" style="text-align:center;border-radius:12px"><code>12px</code></div>
+    <div class="card" style="text-align:center;border-radius:16px"><code>16px</code></div>
+    <div class="card" style="text-align:center;border-radius:20px"><code>20px</code></div>
+    <div class="card" style="text-align:center;border-radius:22px"><code>22px</code></div>
+    <div class="card" style="text-align:center;border-radius:999px"><code>999px</code></div>
+  </div>
+
+  <table style="margin-top:26px">
+    <tr><th>Curva</th><th>Valor</th><th>Onde</th></tr>
+    <tr><td><code>--ease-out-expo</code></td><td><code>cubic-bezier(.16,1,.3,1)</code></td><td>Entrada de elemento, troca de tela</td></tr>
+    <tr><td><code>--ease-in-expo</code></td><td><code>cubic-bezier(.7,0,.84,0)</code></td><td>Saída, algo que desaparece</td></tr>
+  </table>
+  <p style="color:var(--muted-2);font-size:14px;margin-top:14px">
+    Toda animação respeita <code>prefers-reduced-motion</code>.
+  </p>
+</section>
+
+<!-- 06 · Contraste -->
+<section>
+  <div class="sec-head"><span class="n">06</span><h2>Contraste</h2></div>
+  <p class="sec-sub">Cor de marca escura é bonita e reprova em texto com facilidade. Rode
+     <code>node scripts/check-palette.mjs</code> depois de mexer em qualquer token.</p>
+
+  <table>
+    <tr><th>Par</th><th>Razão</th><th>Mínimo</th><th>Uso</th></tr>
+    <tr><td><code>ink / bg</code></td><td>15,32:1</td><td>4,5</td><td class="ok">Corpo de texto</td></tr>
+    <tr><td><code>muted / bg</code></td><td>9,11:1</td><td>4,5</td><td class="ok">Texto secundário</td></tr>
+    <tr><td><code>faint / bg</code></td><td>4,71:1</td><td>3</td><td class="ok">Apoio, texto grande e UI</td></tr>
+    <tr><td><code>brand / bg</code></td><td>7,84:1</td><td>4,5</td><td class="ok">Link e destaque</td></tr>
+    <tr><td><code>brand-2 / bg</code></td><td>9,75:1</td><td>4,5</td><td class="ok">Acento secundário</td></tr>
+    <tr><td><code>brand-600 / bg</code></td><td>3,75:1</td><td>3</td><td class="ok">Borda e preenchimento</td></tr>
+    <tr><td><code>brand-deep / bg</code></td><td>2,20:1</td><td>—</td><td class="no">Nunca em texto</td></tr>
+    <tr><td><code>ink-invert / brand</code></td><td>8,34:1</td><td>4,5</td><td class="ok">Texto do botão primário</td></tr>
+  </table>
+</section>
+
+<!-- 07 · Onde vale -->
+<section style="border-bottom:0">
+  <div class="sec-head"><span class="n">07</span><h2>Onde este sistema já vale</h2></div>
+  <table>
+    <tr><th>Superfície</th><th>Estado</th></tr>
+    <tr><td>Site institucional (<code>web/</code>)</td><td class="ok">Migrado</td></tr>
+    <tr><td>Este documento</td><td class="ok">Migrado</td></tr>
+    <tr><td>Formulário de diagnóstico</td><td style="color:var(--warning)">Paleta anterior</td></tr>
+    <tr><td>CRM</td><td style="color:var(--warning)">Paleta anterior</td></tr>
+  </table>
+  <div class="nota alerta">
+    <b>Migração pendente.</b> O formulário e o CRM ainda usam o verde-neon sobre quase preto.
+    Como os dois consomem os mesmos <i>nomes</i> de token, a troca é substituir os valores no
+    bloco de tokens de cada um e revisar as cores fixas que sobraram no código.
   </div>
 </section>
 
-<footer>
-  CodeSants Design System · espelha <code>web/app/globals.css</code> · veja o formulário em
-  <a href="./diagnostico-estrategico.html">diagnostico-estrategico.html</a>
+</main>
+
+<footer class="wrap">
+  CodeSants · Design System · Os tokens espelham <code>web/app/globals.css</code>.
 </footer>
 
-</div>
 </body>
 </html>
